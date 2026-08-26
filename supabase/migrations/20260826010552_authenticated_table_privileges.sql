@@ -1,0 +1,9 @@
+grant select, insert, update, delete on table public.profiles to authenticated;
+grant select, insert, update, delete on table public.workspaces to authenticated;
+grant select, insert, update, delete on table public.workspace_members to authenticated;
+grant select, insert, update, delete on table public.clients to authenticated;
+grant select, insert, update, delete on table public.projects to authenticated;
+grant select, insert, update, delete on table public.deliverables to authenticated;
+grant select, insert, update, delete on table public.project_files to authenticated;
+grant select, insert, update, delete on table public.invoices to authenticated;
+grant select, insert, update, delete on table public.invoice_items to authenticated;
