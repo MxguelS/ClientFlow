@@ -4,7 +4,9 @@ import { NextResponse, type NextRequest } from "next/server";
 import { parsePublicEnv } from "@/lib/env";
 import type { Database } from "@/types/database.types";
 
-export async function updateSession(request: NextRequest) {
+export async function updateSession(
+	request: NextRequest,
+): Promise<{ response: NextResponse; isAuthenticated: boolean }> {
 	let response = NextResponse.next({ request });
 
 	const env = parsePublicEnv();
@@ -33,7 +35,9 @@ export async function updateSession(request: NextRequest) {
 	// Refresca el token si es necesario. No colocar código entre
 	// createServerClient() y getUser(): de lo contrario la sesión podría
 	// quedar inconsistente entre navegador y servidor.
-	await supabase.auth.getUser();
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
 
-	return response;
+	return { response, isAuthenticated: user !== null };
 }
