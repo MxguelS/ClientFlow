@@ -1,0 +1,171 @@
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import { EditProjectButton } from "@/components/projects/edit-project-button";
+import { ProjectStatusBadge } from "@/components/projects/project-status-badge";
+import { createClient } from "@/lib/supabase/server";
+
+export const metadata = { title: "Proyecto · ClientFlow" };
+
+const dateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
+	dateStyle: "medium",
+	timeStyle: "short",
+});
+
+const dateFormatter = new Intl.DateTimeFormat("es-ES", {
+	day: "2-digit",
+	month: "short",
+	year: "numeric",
+});
+
+function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
+	return (
+		<div className="flex items-baseline justify-between gap-6 py-2.5">
+			<span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">{label}</span>
+			<span className="min-w-0 truncate text-right text-sm text-primary">
+				{value ?? <span className="text-tertiary">—</span>}
+			</span>
+		</div>
+	);
+}
+
+export default async function ProjectDetailPage({
+	params,
+}: {
+	params: Promise<{ id: string }>;
+}) {
+	const { id } = await params;
+	const supabase = await createClient();
+
+	const [{ data: project }, { data: clients }, { data: allProjects }] =
+		await Promise.all([
+			supabase
+				.from("projects")
+				.select(
+					"id, name, description, status, budget, start_date, due_date, created_at, updated_at, client_id, client:clients(name)",
+				)
+				.eq("id", id)
+				.maybeSingle(),
+			supabase.from("clients").select("id, name").order("name"),
+			supabase
+				.from("projects")
+				.select("id, name, status")
+				.order("created_at", { ascending: false }),
+		]);
+
+	if (!project) notFound();
+
+	const clientName =
+		typeof project.client === "object" && project.client !== null
+			? (project.client.name as string)
+			: "";
+
+	const budgetFormatter = new Intl.NumberFormat("es-ES", {
+		style: "currency",
+		currency: "USD",
+		maximumFractionDigits: 2,
+	});
+
+	return (
+		<div className="mx-auto max-w-6xl px-5 py-6 sm:px-8 lg:px-10">
+			<Link
+				href="/projects"
+				className="inline-flex items-center gap-1.5 text-sm text-secondary transition-colors hover:text-primary"
+			>
+				<ArrowLeft aria-hidden="true" className="size-3.5" />
+				Proyectos
+			</Link>
+
+			<div className="mt-4 grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-10">
+				<aside className="hidden lg:block" aria-label="Lista de proyectos">
+					<p className="border-b border-line pb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+						Todos los proyectos
+					</p>
+					<ul className="mt-1">
+						{allProjects?.map((row) => (
+							<li key={row.id}>
+								<Link
+									href={`/projects/${row.id}`}
+									aria-current={row.id === project.id ? "page" : undefined}
+									className={`flex items-center justify-between gap-3 rounded-md px-2.5 py-2 text-sm transition-colors ${
+										row.id === project.id
+											? "bg-accent-soft font-medium text-accent-strong"
+											: "text-secondary hover:bg-surface-hover hover:text-primary"
+									}`}
+								>
+									<span className="min-w-0 truncate">{row.name}</span>
+									<ProjectStatusBadge status={row.status} />
+								</Link>
+							</li>
+						))}
+					</ul>
+				</aside>
+
+				<div className="min-w-0">
+					<div className="flex items-start justify-between gap-4 border-b border-line pb-5">
+						<div className="min-w-0">
+							<h1 className="truncate text-xl font-semibold tracking-[-0.02em] text-primary">{project.name}</h1>
+							<div className="mt-2">
+								<ProjectStatusBadge status={project.status} />
+							</div>
+						</div>
+						<EditProjectButton
+							project={{
+								id: project.id,
+								name: project.name,
+								clientId: project.client_id,
+								description: project.description,
+								status: project.status,
+								budget: project.budget,
+								startDate: project.start_date,
+								dueDate: project.due_date,
+							}}
+							clients={(clients ?? []).map((client) => ({
+								id: client.id,
+								name: client.name,
+							}))}
+						/>
+					</div>
+
+					<section className="border-b border-line py-2" aria-label="Datos del proyecto">
+						<InfoRow
+							label="Cliente"
+							value={
+								<Link href={`/clients/${project.client_id}`} className="text-accent hover:underline">
+									{clientName}
+								</Link>
+							}
+						/>
+						<InfoRow
+							label="Presupuesto"
+							value={project.budget !== null ? budgetFormatter.format(project.budget) : null}
+						/>
+						<InfoRow
+							label="Inicio"
+							value={project.start_date ? dateFormatter.format(new Date(project.start_date)) : null}
+						/>
+						<InfoRow
+							label="Fin"
+							value={project.due_date ? dateFormatter.format(new Date(project.due_date)) : null}
+						/>
+					</section>
+
+					<section className="py-4" aria-label="Descripción del proyecto">
+						<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">Descripción</p>
+						{project.description ? (
+							<p className="mt-2 whitespace-pre-line text-sm leading-6 text-secondary">{project.description}</p>
+						) : (
+							<p className="mt-2 text-sm text-tertiary">Sin descripción.</p>
+						)}
+					</section>
+
+					<p className="border-t border-line pt-3 font-mono text-[10px] text-tertiary">
+						Creado {dateTimeFormatter.format(new Date(project.created_at))} · Actualizado{" "}
+						{dateTimeFormatter.format(new Date(project.updated_at))}
+					</p>
+				</div>
+			</div>
+		</div>
+	);
+}

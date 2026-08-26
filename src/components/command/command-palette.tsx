@@ -4,13 +4,16 @@ import {
 	SlidersHorizontal,
 	ArrowRight,
 	Command,
+	FolderKanban,
 	House,
 	LogOut,
 	Moon,
 	Palette,
+	Plus,
 	Search,
 	Sun,
 	SunMoon,
+	Users,
 	} from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -43,6 +46,10 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
 	// Actions capture the current router/theme callbacks for this palette.
 	const actions = useMemo<Action[]>(() => [
 		{ id: "dashboard", label: "Ir al dashboard", keywords: ["inicio home resumen"], group: "Navegación", icon: House, shortcut: "G D", action: () => navigate("/dashboard") },
+		{ id: "clients", label: "Ir a Clientes", keywords: ["clientes customers"], group: "Navegación", icon: Users, shortcut: "G C", action: () => navigate("/clients") },
+		{ id: "projects", label: "Ir a Proyectos", keywords: ["proyectos projects"], group: "Navegación", icon: FolderKanban, shortcut: "G P", action: () => navigate("/projects") },
+		{ id: "new-client", label: "Nuevo cliente", keywords: ["crear cliente añadir"], group: "Navegación", icon: Plus, shortcut: "N C", action: () => navigate("/clients?create=1") },
+		{ id: "new-project", label: "Nuevo proyecto", keywords: ["crear proyecto añadir"], group: "Navegación", icon: Plus, shortcut: "N P", action: () => navigate("/projects?create=1") },
 		{ id: "settings", label: "Abrir ajustes", keywords: ["configuracion preferencias"], group: "Navegación", icon: SlidersHorizontal, shortcut: "G S", action: () => navigate("/settings") },
 		{ id: "appearance-system", label: "Apariencia: System", keywords: ["tema automatico"], group: "Apariencia", icon: SunMoon, action: () => { setAppearance("system"); close(); } },
 		{ id: "appearance-light", label: "Apariencia: Light", keywords: ["tema claro"], group: "Apariencia", icon: Sun, action: () => { setAppearance("light"); close(); } },

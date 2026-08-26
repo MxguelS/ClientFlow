@@ -50,3 +50,31 @@ export async function getPrimaryMembership(): Promise<{
 export async function hasAnyWorkspace(): Promise<boolean> {
 	return (await getPrimaryMembership()) !== null;
 }
+
+/**
+ * Workspace activo del usuario (id + nombre), resuelto SIEMPRE en el
+ * servidor a partir de workspace_members bajo RLS. Nunca se acepta un
+ * workspace_id proveniente del cliente para operaciones de escritura.
+ */
+export async function getPrimaryWorkspace(): Promise<{
+	id: string;
+	name: string;
+} | null> {
+	const supabase = await createClient();
+
+	const { data } = await supabase
+		.from("workspace_members")
+		.select("workspace_id, workspace:workspaces(name)")
+		.limit(1)
+		.maybeSingle();
+
+	if (!data) return null;
+
+	return {
+		id: data.workspace_id,
+		name:
+			typeof data.workspace === "object" && data.workspace !== null
+				? (data.workspace.name as string)
+				: "",
+	};
+}

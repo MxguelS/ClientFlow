@@ -17,11 +17,11 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { UserArea } from "@/components/shell/user-area";
 
 const modules = [
-	{ label: "Clientes", icon: Users },
-	{ label: "Proyectos", icon: FolderKanban },
+	{ label: "Clientes", icon: Users, href: "/clients" },
+	{ label: "Proyectos", icon: FolderKanban, href: "/projects" },
 	{ label: "Entregables", icon: ListChecks },
 	{ label: "Facturas", icon: Receipt },
-];
+] as const;
 
 function Brand({ collapsed }: { collapsed: boolean }) {
 	return (
@@ -78,11 +78,31 @@ export function Sidebar({
 				<div>
 					{collapsed ? null : <p className="mb-2 px-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-tertiary">Trabajo</p>}
 					<div className="space-y-1">
-						{modules.map(({ label, icon: Icon }) => collapsed ? (
-							<Tooltip key={label} content={`${label} · Próximamente`}><span aria-disabled="true" aria-label={`${label}, próximamente`} className={`${navLink(false)} cursor-not-allowed opacity-40`}><Icon aria-hidden="true" className="size-4" /></span></Tooltip>
-						) : (
-							<span key={label} aria-disabled="true" className={`${navLink(false)} cursor-not-allowed opacity-50`}><Icon aria-hidden="true" className="size-4" /><span>{label}</span><span className="ml-auto text-[10px] text-tertiary">Pronto</span></span>
-						))}
+						{modules.map(({ label, icon: Icon, ...rest }) => {
+							const href = "href" in rest ? rest.href : undefined;
+							const active = href !== undefined && (href === "/clients" ? pathname === href || pathname.startsWith(`${href}/`) : pathname.startsWith(href));
+
+							if (href) {
+								return collapsed ? (
+									<Tooltip key={label} content={label}>
+										<Link onClick={onNavigate} href={href} aria-label={label} className={navLink(active)}>
+											<Icon aria-hidden="true" className="size-4" />
+										</Link>
+									</Tooltip>
+								) : (
+									<Link key={label} onClick={onNavigate} href={href} className={navLink(active)}>
+										<Icon aria-hidden="true" className="size-4" />
+										<span>{label}</span>
+									</Link>
+								);
+							}
+
+							return collapsed ? (
+								<Tooltip key={label} content={`${label} · Próximamente`}><span aria-disabled="true" aria-label={`${label}, próximamente`} className={`${navLink(false)} cursor-not-allowed opacity-40`}><Icon aria-hidden="true" className="size-4" /></span></Tooltip>
+							) : (
+								<span key={label} aria-disabled="true" className={`${navLink(false)} cursor-not-allowed opacity-50`}><Icon aria-hidden="true" className="size-4" /><span>{label}</span><span className="ml-auto text-[10px] text-tertiary">Pronto</span></span>
+							);
+						})}
 					</div>
 				</div>
 			</nav>

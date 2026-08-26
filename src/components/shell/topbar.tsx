@@ -33,7 +33,7 @@ export function Topbar({
 				<span className="text-sm font-semibold tracking-tight text-primary">ClientFlow</span>
 			</div>
 			<div className="ml-auto flex items-center gap-1.5">
-				<button type="button" onClick={onOpenPalette} aria-label="Abrir acciones rápidas" className="hidden h-8 items-center gap-2 rounded-md border border-line bg-surface-sunken px-2.5 text-xs text-tertiary transition-colors hover:border-line-strong hover:text-secondary sm:flex">
+				<button type="button" onClick={onOpenPalette} aria-label="Abrir acciones rápidas" className="hidden h-8 items-center gap-2 rounded-md border border-line bg-surface-sunken px-2.5 text-xs text-secondary transition-colors hover:border-line-strong hover:text-primary sm:flex">
 					<Search aria-hidden="true" className="size-3.5" /><span>Acciones rápidas</span><Kbd>Cmd K</Kbd>
 				</button>
 				<Tooltip content="Acciones rápidas">
