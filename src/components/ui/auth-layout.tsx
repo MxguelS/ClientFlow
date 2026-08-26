@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function AuthLayout({
 	title,
 	subtitle,
@@ -8,15 +10,16 @@ export default function AuthLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<main className="flex min-h-screen items-center justify-center p-6">
-			<div className="w-full max-w-sm">
-				<h1 className="text-center text-xl font-bold tracking-tight">
+		<main className="relative flex min-h-screen items-center justify-center overflow-y-auto p-5 sm:p-8">
+			<div className="relative z-10 w-full max-w-sm">
+				<Link href="/" className="mx-auto flex w-fit items-center gap-2 text-sm font-semibold tracking-tight text-primary">
+					<span className="flex size-7 items-center justify-center rounded-lg bg-accent text-accent-contrast shadow-subtle">C</span>
 					ClientFlow
-				</h1>
-				<div className="mt-6 rounded-lg border border-neutral-200 bg-white p-6 shadow-sm">
-					<h2 className="text-lg font-semibold">{title}</h2>
+				</Link>
+				<div className="mt-6 rounded-xl border border-line-strong bg-surface/90 p-6 shadow-window backdrop-blur-sm">
+					<h1 className="text-lg font-semibold tracking-tight text-primary">{title}</h1>
 					{subtitle ? (
-						<p className="mt-1 text-sm text-neutral-500">
+						<p className="mt-1 text-sm text-secondary">
 							{subtitle}
 						</p>
 					) : null}

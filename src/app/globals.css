@@ -1,1 +1,447 @@
 @import "tailwindcss";
+
+/*
+ * ============================================================
+ * ClientFlow Design System
+ * Desktop application feel — Linear clarity + macOS surfaces
+ * ============================================================
+ *
+ * Arquitectura:
+ *   1. Tokens neutros (light/dark)  -> superficies, texto, bordes
+ *   2. Tokens de acento por theme   -> 7 paletas diseñadas a mano
+ *   3. Selección appearance         -> mapea acentos claros/oscuros
+ *   4. Semánticos                   -> significado constante, no cambian con theme
+ *   5. @theme inline                -> expone tokens como utilidades Tailwind
+ */
+
+@custom-variant dark (&:where([data-appearance="dark"], [data-appearance="dark"] *));
+
+/* ------------------------------------------------------------
+ * 1. TOKENS NEUTROS
+ * ------------------------------------------------------------ */
+
+:root,
+[data-appearance="light"] {
+	color-scheme: light;
+
+	/* Fondo "escritorio" tras la ventana */
+	--wallpaper-from: #eceef2;
+	--wallpaper-to: #e2e5eb;
+
+	/* Superficies */
+	--background: #f2f3f6;
+	--surface: #ffffff;
+	--surface-raised: #ffffff;
+	--surface-sunken: #f6f6f8;
+	--surface-hover: #f4f4f6;
+	--glass: rgb(255 255 255 / 78%);
+
+	/* Texto */
+	--text-primary: #1a1a20;
+	--text-secondary: #55555f;
+	--text-tertiary: #8b8b96;
+	--text-inverse: #ffffff;
+
+	/* Bordes */
+	--border-subtle: rgb(17 17 24 / 8%);
+	--border-strong: rgb(17 17 24 / 15%);
+
+	/* Semánticos (significado fijo) */
+	--success: #17803d;
+	--success-soft: rgb(34 197 94 / 12%);
+	--warning: #b45309;
+	--warning-soft: rgb(245 158 11 / 14%);
+	--danger: #dc2646;
+	--danger-soft: rgb(239 68 68 / 11%);
+
+	/* Sombras */
+	--shadow-window: 0 1px 2px rgb(15 15 20 / 5%), 0 24px 60px -12px rgb(15 15 20 / 18%), 0 48px 120px -24px rgb(15 15 20 / 12%);
+	--shadow-pop: 0 4px 8px -2px rgb(15 15 20 / 8%), 0 16px 40px -8px rgb(15 15 20 / 22%);
+	--shadow-subtle: 0 1px 2px rgb(15 15 20 / 5%);
+	--shadow-inset-hairline: inset 0 1px 0 rgb(255 255 255 / 65%);
+
+	/* Glow ambiental */
+	--glow-opacity: 0.16;
+}
+
+[data-appearance="dark"] {
+	color-scheme: dark;
+
+	--wallpaper-from: #0a0a0d;
+	--wallpaper-to: #121217;
+
+	--background: #0c0c0f;
+	--surface: #151518;
+	--surface-raised: #1b1b1f;
+	--surface-sunken: #101013;
+	--surface-hover: #202024;
+	--glass: rgb(24 24 29 / 78%);
+
+	--text-primary: #f0f0f3;
+	--text-secondary: #a4a4af;
+	--text-tertiary: #6e6e79;
+	--text-inverse: #101013;
+
+	--border-subtle: rgb(255 255 255 / 8%);
+	--border-strong: rgb(255 255 255 / 16%);
+
+	--success: #3ddc84;
+	--success-soft: rgb(61 220 132 / 13%);
+	--warning: #fbbf24;
+	--warning-soft: rgb(251 191 36 / 13%);
+	--danger: #f8717f;
+	--danger-soft: rgb(248 113 127 / 13%);
+
+	--shadow-window: 0 1px 2px rgb(0 0 0 / 40%), 0 24px 64px -12px rgb(0 0 0 / 55%), 0 48px 128px -24px rgb(0 0 0 / 45%);
+	--shadow-pop: 0 4px 8px -2px rgb(0 0 0 / 40%), 0 16px 48px -8px rgb(0 0 0 / 60%);
+	--shadow-subtle: 0 1px 2px rgb(0 0 0 / 30%);
+	--shadow-inset-hairline: inset 0 1px 0 rgb(255 255 255 / 5%);
+
+	--glow-opacity: 0.22;
+}
+
+/* ------------------------------------------------------------
+ * 2. ACENTOS POR THEME (claro + oscuro por paleta)
+ *    El theme controla acento/focus/selección/glow.
+ *    NUNCA los semánticos.
+ * ------------------------------------------------------------ */
+
+[data-theme="midnight"] {
+	--accent-l: #4f5ae8;
+	--accent-l-hover: #434ce0;
+	--accent-l-strong: #3d47c9;
+	--accent-d: #7c86f7;
+	--accent-d-hover: #8e97f9;
+	--accent-d-strong: #9ba3fa;
+	--glow-a: #4c51d6;
+	--glow-b: #7a63e8;
+}
+
+[data-theme="crimson"] {
+	--accent-l: #d3313e;
+	--accent-l-hover: #c22531;
+	--accent-l-strong: #ab1c27;
+	--accent-d: #f0616b;
+	--accent-d-hover: #f4757e;
+	--accent-d-strong: #f88f97;
+	--glow-a: #b03a3e;
+	--glow-b: #d4526b;
+}
+
+[data-theme="ocean"] {
+	--accent-l: #0891b2;
+	--accent-l-hover: #0e7f9d;
+	--accent-l-strong: #0c6e89;
+	--accent-d: #38c0de;
+	--accent-d-hover: #55cbe5;
+	--accent-d-strong: #79d7ec;
+	--glow-a: #1d7f98;
+	--glow-b: #2b9db8;
+}
+
+[data-theme="aurora"] {
+	--accent-l: #8444d6;
+	--accent-l-hover: #7738c9;
+	--accent-l-strong: #652cb3;
+	--accent-d: #b083f2;
+	--accent-d-hover: #bd96f5;
+	--accent-d-strong: #cbaaf7;
+	--glow-a: #6d4bc7;
+	--glow-b: #9d55d9;
+}
+
+[data-theme="ember"] {
+	--accent-l: #d96c1e;
+	--accent-l-hover: #cc5f12;
+	--accent-l-strong: #b55210;
+	--accent-d: #f2954e;
+	--accent-d-hover: #f5a568;
+	--accent-d-strong: #f7b785;
+	--glow-a: #c05f1d;
+	--glow-b: #d97b2e;
+}
+
+[data-theme="forest"] {
+	--accent-l: #1f9257;
+	--accent-l-hover: #1b844e;
+	--accent-l-strong: #177243;
+	--accent-d: #4cc38a;
+	--accent-d-hover: #63cea0;
+	--accent-d-strong: #82d9b3;
+	--glow-a: #2c7a50;
+	--glow-b: #3f9968;
+}
+
+[data-theme="mono"] {
+	--accent-l: #3f3f46;
+	--accent-l-hover: #2d2d33;
+	--accent-l-strong: #1c1c21;
+	--accent-d: #b4b4bc;
+	--accent-d-hover: #c3c3ca;
+	--accent-d-strong: #d2d2d8;
+	--glow-a: #6b6b72;
+	--glow-b: #8f8f97;
+}
+
+/* Derivados comunes del acento */
+[data-theme] {
+	--accent-soft-l: color-mix(in srgb, var(--accent-l) 10%, transparent);
+	--accent-soft-d: color-mix(in srgb, var(--accent-d) 14%, transparent);
+}
+
+/* ------------------------------------------------------------
+ * 3. SELECCIÓN DE APPEARANCE
+ * ------------------------------------------------------------ */
+
+[data-appearance="light"] {
+	--accent: var(--accent-l);
+	--accent-hover: var(--accent-l-hover);
+	--accent-strong: var(--accent-l-strong);
+	--accent-contrast: #ffffff;
+	--accent-soft: var(--accent-soft-l);
+	--ring: var(--accent-l);
+}
+
+[data-appearance="dark"] {
+	--accent: var(--accent-d);
+	--accent-hover: var(--accent-d-hover);
+	--accent-strong: var(--accent-d-strong);
+	--accent-contrast: #14141a;
+	--accent-soft: var(--accent-soft-d);
+	--ring: var(--accent-d);
+}
+
+/* Selección de texto con acento del theme */
+::selection {
+	background: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+/* ------------------------------------------------------------
+ * 4. TOKENS ESTRUCTURALES
+ * ------------------------------------------------------------ */
+
+:root {
+	--radius-sm: 6px;
+	--radius-md: 8px;
+	--radius-lg: 12px;
+	--radius-xl: 16px;
+	--radius-window: 18px;
+
+	--duration-fast: 150ms;
+	--duration-base: 200ms;
+	--duration-slow: 250ms;
+	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+	--z-glow: 0;
+	--z-window: 10;
+	--z-sidebar: 20;
+	--z-topbar: 30;
+	--z-overlay: 40;
+	--z-palette: 50;
+	--z-tooltip: 60;
+}
+
+/* ------------------------------------------------------------
+ * 5. UTILIDADES TAILWIND
+ * ------------------------------------------------------------ */
+
+@theme inline {
+	--font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+	--font-mono: var(--font-geist-mono), ui-monospace, monospace;
+	--font-display: "DM Serif Display", Iowan Old Style, Palatino, serif;
+
+	--color-wallpaper-from: var(--wallpaper-from);
+	--color-wallpaper-to: var(--wallpaper-to);
+	--color-background: var(--background);
+	--color-surface: var(--surface);
+	--color-surface-raised: var(--surface-raised);
+	--color-surface-sunken: var(--surface-sunken);
+	--color-surface-hover: var(--surface-hover);
+	--color-glass: var(--glass);
+
+	--color-primary: var(--text-primary);
+	--color-secondary: var(--text-secondary);
+	--color-tertiary: var(--text-tertiary);
+	--color-inverse: var(--text-inverse);
+
+	--color-line: var(--border-subtle);
+	--color-line-strong: var(--border-strong);
+
+	--color-accent: var(--accent);
+	--color-accent-hover: var(--accent-hover);
+	--color-accent-strong: var(--accent-strong);
+	--color-accent-contrast: var(--accent-contrast);
+	--color-accent-soft: var(--accent-soft);
+
+	--color-success: var(--success);
+	--color-success-soft: var(--success-soft);
+	--color-warning: var(--warning);
+	--color-warning-soft: var(--warning-soft);
+	--color-danger: var(--danger);
+	--color-danger-soft: var(--danger-soft);
+
+	--radius-sm: var(--radius-sm);
+	--radius-md: var(--radius-md);
+	--radius-lg: var(--radius-lg);
+	--radius-xl: var(--radius-xl);
+	--radius-window: var(--radius-window);
+
+	--shadow-window: var(--shadow-window);
+	--shadow-pop: var(--shadow-pop);
+	--shadow-subtle: var(--shadow-subtle);
+
+	--ease-flow: var(--ease-out);
+}
+
+/* ------------------------------------------------------------
+ * 6. BASE
+ * ------------------------------------------------------------ */
+
+html,
+body {
+	height: 100%;
+}
+
+.display-face {
+	font-family: var(--font-display);
+	font-weight: 400;
+}
+
+body {
+	background: linear-gradient(160deg, var(--wallpaper-from), var(--wallpaper-to));
+	color: var(--text-primary);
+	font-family: var(--font-sans);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+	overflow: hidden;
+}
+
+.cf-ambient-glow {
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+	pointer-events: none;
+	z-index: var(--z-glow);
+}
+
+.cf-ambient-glow-a,
+.cf-ambient-glow-b {
+	position: absolute;
+	width: 45%;
+	height: 58%;
+	max-width: 640px;
+	max-height: 640px;
+	border-radius: 999px;
+	filter: blur(96px);
+	opacity: var(--glow-opacity);
+	animation: cf-glow-drift 60s ease-in-out infinite;
+}
+
+.cf-ambient-glow-a {
+	left: -10%;
+	top: -18%;
+	background: var(--glow-a);
+}
+
+.cf-ambient-glow-b {
+	right: -12%;
+	bottom: -22%;
+	background: var(--glow-b);
+	animation-delay: -30s;
+}
+
+*:focus-visible {
+	outline: 2px solid var(--ring);
+	outline-offset: 2px;
+	border-radius: var(--radius-sm);
+}
+
+/* Scrollbars discretas, estilo aplicación de escritorio */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: color-mix(in srgb, var(--text-tertiary) 40%, transparent) transparent;
+}
+
+*::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+	background: color-mix(in srgb, var(--text-tertiary) 35%, transparent);
+	border-radius: 8px;
+	border: 3px solid transparent;
+	background-clip: content-box;
+}
+
+*::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+/* ------------------------------------------------------------
+ * 7. MOTION
+ * ------------------------------------------------------------ */
+
+@keyframes cf-glow-drift {
+	0% {
+		transform: translate3d(-4%, -2%, 0) scale(1);
+	}
+	50% {
+		transform: translate3d(3%, 3%, 0) scale(1.06);
+	}
+	100% {
+		transform: translate3d(-4%, -2%, 0) scale(1);
+	}
+}
+
+@keyframes cf-overlay-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes cf-pop-in {
+	from {
+		opacity: 0;
+		transform: translateY(6px) scale(0.98);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@keyframes cf-pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.45;
+	}
+}
+
+.cf-animate-overlay {
+	animation: cf-overlay-in var(--duration-base) var(--ease-out);
+}
+
+.cf-animate-pop {
+	animation: cf-pop-in var(--duration-base) var(--ease-out);
+}
+
+.cf-animate-skeleton {
+	animation: cf-pulse 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}

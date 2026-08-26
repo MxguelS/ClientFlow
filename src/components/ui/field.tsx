@@ -1,10 +1,11 @@
 import type { ComponentProps } from "react";
 
-export const inputClasses =
-	"w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 outline-none focus-visible:border-neutral-900 focus-visible:ring-2 focus-visible:ring-neutral-900/20 disabled:cursor-not-allowed disabled:opacity-60";
+import { buttonClasses } from "@/components/ui/button";
+import { inputClasses } from "@/components/ui/input";
 
-export const buttonPrimaryClasses =
-	"inline-flex w-full items-center justify-center gap-2 rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
+export { inputClasses };
+
+export const buttonPrimaryClasses = buttonClasses({ size: "lg" });
 
 type FieldProps = ComponentProps<"input"> & {
 	label: string;
@@ -17,7 +18,7 @@ export function Field({ label, error, id, ...props }: FieldProps) {
 		<div>
 			<label
 				htmlFor={id}
-				className="block text-sm font-medium text-neutral-800"
+				className="block text-sm font-medium text-primary"
 			>
 				{label}
 			</label>
@@ -34,7 +35,7 @@ export function Field({ label, error, id, ...props }: FieldProps) {
 				<p
 					id={`${id}-error`}
 					role="alert"
-					className="mt-1 text-sm text-red-600"
+					className="mt-1 text-sm text-danger"
 				>
 					{error}
 				</p>
@@ -47,7 +48,7 @@ export function FormAlert({ children }: { children: React.ReactNode }) {
 	return (
 		<div
 			role="alert"
-			className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+			className="rounded-md border border-danger/20 bg-danger-soft px-3 py-2 text-sm text-danger"
 		>
 			{children}
 		</div>
