@@ -1,0 +1,7 @@
+packages: []
+
+onlyBuiltDependencies:
+  - supabase
+
+allowBuilds:
+  unrs-resolver: true
