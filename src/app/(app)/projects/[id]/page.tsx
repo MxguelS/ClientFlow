@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { EditProjectButton } from "@/components/projects/edit-project-button";
 import { ProjectStatusBadge } from "@/components/projects/project-status-badge";
+import { formatDateOnly } from "@/lib/dates/date-only";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "Proyecto · ClientFlow" };
@@ -11,12 +12,6 @@ export const metadata = { title: "Proyecto · ClientFlow" };
 const dateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
 	dateStyle: "medium",
 	timeStyle: "short",
-});
-
-const dateFormatter = new Intl.DateTimeFormat("es-ES", {
-	day: "2-digit",
-	month: "short",
-	year: "numeric",
 });
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
@@ -143,11 +138,11 @@ export default async function ProjectDetailPage({
 						/>
 						<InfoRow
 							label="Inicio"
-							value={project.start_date ? dateFormatter.format(new Date(project.start_date)) : null}
+							value={project.start_date ? formatDateOnly(project.start_date) : null}
 						/>
 						<InfoRow
 							label="Fin"
-							value={project.due_date ? dateFormatter.format(new Date(project.due_date)) : null}
+							value={project.due_date ? formatDateOnly(project.due_date) : null}
 						/>
 					</section>
 
