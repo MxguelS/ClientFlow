@@ -19,7 +19,7 @@ import { UserArea } from "@/components/shell/user-area";
 const modules = [
 	{ label: "Clientes", icon: Users, href: "/clients" },
 	{ label: "Proyectos", icon: FolderKanban, href: "/projects" },
-	{ label: "Entregables", icon: ListChecks },
+	{ label: "Entregables", icon: ListChecks, href: "/deliverables" },
 	{ label: "Facturas", icon: Receipt },
 ] as const;
 

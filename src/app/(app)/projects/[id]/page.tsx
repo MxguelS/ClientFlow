@@ -2,6 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { ProjectDeliverablesSection } from "@/components/deliverables/project-deliverables-section";
 import { EditProjectButton } from "@/components/projects/edit-project-button";
 import { ProjectStatusBadge } from "@/components/projects/project-status-badge";
 import { formatDateOnly } from "@/lib/dates/date-only";
@@ -33,7 +34,12 @@ export default async function ProjectDetailPage({
 	const { id } = await params;
 	const supabase = await createClient();
 
-	const [{ data: project }, { data: clients }, { data: allProjects }] =
+	const [
+		{ data: project },
+		{ data: clients },
+		{ data: allProjects },
+		{ data: deliverables },
+	] =
 		await Promise.all([
 			supabase
 				.from("projects")
@@ -46,6 +52,11 @@ export default async function ProjectDetailPage({
 			supabase
 				.from("projects")
 				.select("id, name, status")
+				.order("created_at", { ascending: false }),
+			supabase
+				.from("deliverables")
+				.select("id, title, status, due_date")
+				.eq("project_id", id)
 				.order("created_at", { ascending: false }),
 		]);
 
@@ -154,6 +165,20 @@ export default async function ProjectDetailPage({
 							<p className="mt-2 text-sm text-tertiary">Sin descripción.</p>
 						)}
 					</section>
+
+					<ProjectDeliverablesSection
+						currentProjectId={project.id}
+						projects={(allProjects ?? []).map((row) => ({
+							id: row.id,
+							name: row.name,
+						}))}
+						deliverables={(deliverables ?? []).map((deliverable) => ({
+							id: deliverable.id,
+							title: deliverable.title,
+							status: deliverable.status,
+							dueDate: deliverable.due_date,
+						}))}
+					/>
 
 					<p className="border-t border-line pt-3 font-mono text-[10px] text-tertiary">
 						Creado {dateTimeFormatter.format(new Date(project.created_at))} · Actualizado{" "}
