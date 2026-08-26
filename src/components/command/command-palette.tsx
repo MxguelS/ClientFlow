@@ -72,7 +72,7 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent showClose={false} className="top-[18%] -translate-y-0 p-0 sm:max-w-xl">
+			<DialogContent showClose={false} className="top-[18%] -translate-y-0! p-0 sm:max-w-xl">
 				<DialogTitle className="sr-only">Acciones rápidas</DialogTitle>
 				<DialogDescription className="sr-only">Busca una acción y pulsa Enter para ejecutarla.</DialogDescription>
 				<div className="flex items-center gap-3 border-b border-line px-4">

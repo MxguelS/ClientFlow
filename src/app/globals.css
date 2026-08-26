@@ -60,6 +60,9 @@
 	--shadow-subtle: 0 1px 2px rgb(15 15 20 / 5%);
 	--shadow-inset-hairline: inset 0 1px 0 rgb(255 255 255 / 65%);
 
+	/* Backdrop de dialogs: capa oscura translúcida, sin blur */
+	--overlay: rgb(15 15 20 / 32%);
+
 	/* Glow ambiental */
 	--glow-opacity: 0.16;
 }
@@ -96,6 +99,8 @@
 	--shadow-pop: 0 4px 8px -2px rgb(0 0 0 / 40%), 0 16px 48px -8px rgb(0 0 0 / 60%);
 	--shadow-subtle: 0 1px 2px rgb(0 0 0 / 30%);
 	--shadow-inset-hairline: inset 0 1px 0 rgb(255 255 255 / 5%);
+
+	--overlay: rgb(0 0 0 / 55%);
 
 	--glow-opacity: 0.22;
 }
@@ -267,6 +272,8 @@
 	--color-line: var(--border-subtle);
 	--color-line-strong: var(--border-strong);
 
+	--color-overlay: var(--overlay);
+
 	--color-accent: var(--accent);
 	--color-accent-hover: var(--accent-hover);
 	--color-accent-strong: var(--accent-strong);
@@ -354,6 +361,27 @@ body {
 	outline: 2px solid var(--ring);
 	outline-offset: 2px;
 	border-radius: var(--radius-sm);
+}
+
+/* Los campos de formulario usan su propio lenguaje de focus (borde + ring
+ * sutiles con el accent activo); el outline global se reserva para
+ * botones, links y controles no-textuales. */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+	outline: none;
+}
+
+/* Controles numéricos integrados con el sistema: sin spinners nativos */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+	appearance: textfield;
 }
 
 /* Scrollbars discretas, estilo aplicación de escritorio */

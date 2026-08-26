@@ -7,6 +7,9 @@ export { inputClasses };
 
 export const buttonPrimaryClasses = buttonClasses({ size: "lg" });
 
+export const fieldLabelClasses =
+	"block text-[13px] font-medium text-primary";
+
 type FieldProps = ComponentProps<"input"> & {
 	label: string;
 	error?: string;
@@ -18,7 +21,7 @@ export function Field({ label, error, id, ...props }: FieldProps) {
 		<div>
 			<label
 				htmlFor={id}
-				className="block text-sm font-medium text-primary"
+				className={fieldLabelClasses}
 			>
 				{label}
 			</label>
@@ -28,14 +31,14 @@ export function Field({ label, error, id, ...props }: FieldProps) {
 				autoComplete={props.type === "password" ? "current-password" : props.autoComplete}
 				aria-invalid={error ? true : undefined}
 				aria-describedby={error ? `${id}-error` : undefined}
-				className={`${inputClasses} mt-1`}
+				className={`${inputClasses} mt-1.5`}
 				{...props}
 			/>
 			{error ? (
 				<p
 					id={`${id}-error`}
 					role="alert"
-					className="mt-1 text-sm text-danger"
+					className="mt-1.5 text-[13px] text-danger"
 				>
 					{error}
 				</p>
@@ -48,7 +51,7 @@ export function FormAlert({ children }: { children: React.ReactNode }) {
 	return (
 		<div
 			role="alert"
-			className="rounded-md border border-danger/20 bg-danger-soft px-3 py-2 text-sm text-danger"
+			className="rounded-md border border-danger/20 bg-danger-soft px-3 py-2 text-[13px] leading-5 text-danger"
 		>
 			{children}
 		</div>

@@ -67,7 +67,7 @@ export function AppShell({
 			</div>
 
 			<Dialog open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
-				<DialogContent showClose={false} className="left-0 top-0 h-full w-72 -translate-x-0 -translate-y-0 rounded-none border-y-0 border-l-0 p-0 sm:hidden">
+				<DialogContent showClose={false} className="left-0! top-0! h-full w-72 -translate-x-0! -translate-y-0! rounded-none border-y-0 border-l-0 p-0 sm:hidden">
 					<DialogTitle className="sr-only">Navegación</DialogTitle>
 					<Sidebar workspaceName={workspace.name} user={user} collapsed={false} onToggle={() => setMobileNavOpen(false)} onNavigate={() => setMobileNavOpen(false)} />
 				</DialogContent>

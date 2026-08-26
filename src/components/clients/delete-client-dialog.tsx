@@ -9,9 +9,15 @@ import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
+	DialogBody,
 	DialogDescription,
+	DialogFooter,
+	DialogHeader,
 	DialogTitle,
+	dialogDescriptionClasses,
+	dialogTitleClasses,
 } from "@/components/ui/dialog";
+import { FormAlert } from "@/components/ui/field";
 
 export function DeleteClientDialog({
 	open,
@@ -66,28 +72,30 @@ export function DeleteClientDialog({
 	return (
 		<Dialog open={open} onOpenChange={handleClose}>
 			<DialogContent className="sm:max-w-md">
-				<div className="flex items-start gap-3">
-					<span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-danger-soft text-danger">
-						<TriangleAlert aria-hidden="true" className="size-4" />
-					</span>
-					<div>
-						<DialogTitle className="text-base font-semibold text-primary">
-							Eliminar cliente
-						</DialogTitle>
-						<DialogDescription className="mt-1.5 text-sm leading-6 text-secondary">
-							Se eliminará <span className="font-medium text-primary">{client.name}</span> y
-							esta acción no se puede deshacer.
-						</DialogDescription>
+				<DialogHeader>
+					<div className="flex items-start gap-3">
+						<span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-danger-soft text-danger">
+							<TriangleAlert aria-hidden="true" className="size-4" />
+						</span>
+						<div className="min-w-0">
+							<DialogTitle className={dialogTitleClasses}>
+								Eliminar cliente
+							</DialogTitle>
+							<DialogDescription className={dialogDescriptionClasses}>
+								Se eliminará <span className="font-medium text-primary">{client.name}</span> y
+								esta acción no se puede deshacer.
+							</DialogDescription>
+						</div>
 					</div>
-				</div>
+				</DialogHeader>
 
 				{error ? (
-					<div role="alert" className="rounded-md border border-danger/20 bg-danger-soft px-3 py-2 text-sm text-danger">
-						{error}
-					</div>
+					<DialogBody className="pt-0">
+						<FormAlert>{error}</FormAlert>
+					</DialogBody>
 				) : null}
 
-				<div className="mt-5 flex justify-end gap-2">
+				<DialogFooter>
 					<Button type="button" variant="secondary" onClick={() => handleClose(false)} disabled={isDeleting}>
 						Cancelar
 					</Button>
@@ -95,7 +103,7 @@ export function DeleteClientDialog({
 						{isDeleting ? <Loader2 aria-hidden className="size-4 animate-spin" /> : null}
 						Eliminar
 					</Button>
-				</div>
+				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	);

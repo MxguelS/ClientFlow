@@ -15,10 +15,16 @@ import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
+	DialogBody,
 	DialogDescription,
+	DialogFooter,
+	DialogHeader,
 	DialogTitle,
+	dialogDescriptionClasses,
+	dialogTitleClasses,
 } from "@/components/ui/dialog";
-import { Field } from "@/components/ui/field";
+import { Field, FormAlert, fieldLabelClasses } from "@/components/ui/field";
+import { selectClasses, textareaClasses } from "@/components/ui/input";
 import {
 	clientFormSchema,
 	CLIENT_STATUSES,
@@ -131,113 +137,114 @@ export function ClientFormDialog({
 	return (
 		<Dialog open={open} onOpenChange={handleClose}>
 			<DialogContent className="sm:max-w-lg">
-				<DialogTitle className="text-base font-semibold text-primary">
-					{client ? "Editar cliente" : "Nuevo cliente"}
-				</DialogTitle>
-				<DialogDescription className="mt-1 text-sm text-secondary">
-					{client
-						? "Actualiza la información del cliente."
-						: "Añade un cliente a tu espacio de trabajo."}
-				</DialogDescription>
+				<DialogHeader>
+					<DialogTitle className={dialogTitleClasses}>
+						{client ? "Editar cliente" : "Nuevo cliente"}
+					</DialogTitle>
+					<DialogDescription className={dialogDescriptionClasses}>
+						{client
+							? "Actualiza la información del cliente."
+							: "Añade un cliente a tu espacio de trabajo."}
+					</DialogDescription>
+				</DialogHeader>
 
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					className="mt-5 space-y-4"
-					noValidate
-				>
-					{formError ? (
-						<div role="alert" className="rounded-md border border-danger/20 bg-danger-soft px-3 py-2 text-sm text-danger">
-							{formError}
-						</div>
-					) : null}
+				<DialogBody>
+					<form
+						id="client-form"
+						onSubmit={handleSubmit(onSubmit)}
+						className="space-y-4"
+						noValidate
+					>
+						{formError ? <FormAlert>{formError}</FormAlert> : null}
 
-					<Field
-						id="client-name"
-						type="text"
-						label="Nombre"
-						placeholder="Nombre del cliente"
-						autoComplete="off"
-						error={errors.name?.message}
-						{...register("name")}
-					/>
-
-					<div className="grid gap-4 sm:grid-cols-2">
 						<Field
-							id="client-company"
+							id="client-name"
 							type="text"
-							label="Empresa"
-							placeholder="Opcional"
+							label="Nombre"
+							placeholder="Nombre del cliente"
 							autoComplete="off"
-							error={errors.company?.message}
-							{...register("company")}
+							error={errors.name?.message}
+							{...register("name")}
 						/>
-						<div>
-							<label htmlFor="client-status" className="block text-sm font-medium text-primary">
-								Estado
-							</label>
-							<select
-								id="client-status"
-								className="mt-1 h-9 w-full rounded-md border border-line-strong bg-surface-sunken px-3 text-sm text-primary outline-none transition-[border-color,box-shadow] duration-200 focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/20"
-								{...register("status")}
-							>
-								{CLIENT_STATUSES.map((status) => (
-									<option key={status} value={status}>
-										{CLIENT_STATUS_LABELS[status]}
-									</option>
-								))}
-							</select>
+
+						<div className="grid gap-4 sm:grid-cols-2">
+							<Field
+								id="client-company"
+								type="text"
+								label="Empresa"
+								placeholder="Opcional"
+								autoComplete="off"
+								error={errors.company?.message}
+								{...register("company")}
+							/>
+							<div>
+								<label htmlFor="client-status" className={fieldLabelClasses}>
+									Estado
+								</label>
+								<select
+									id="client-status"
+									className={`${selectClasses} mt-1.5`}
+									{...register("status")}
+								>
+									{CLIENT_STATUSES.map((status) => (
+										<option key={status} value={status}>
+											{CLIENT_STATUS_LABELS[status]}
+										</option>
+									))}
+								</select>
+							</div>
 						</div>
-					</div>
 
-					<div className="grid gap-4 sm:grid-cols-2">
-						<Field
-							id="client-email"
-							type="email"
-							label="Email"
-							placeholder="Opcional"
-							autoComplete="off"
-							error={errors.email?.message}
-							{...register("email")}
-						/>
-						<Field
-							id="client-phone"
-							type="tel"
-							label="Teléfono"
-							placeholder="Opcional"
-							autoComplete="off"
-							error={errors.phone?.message}
-							{...register("phone")}
-						/>
-					</div>
+						<div className="grid gap-4 sm:grid-cols-2">
+							<Field
+								id="client-email"
+								type="email"
+								label="Email"
+								placeholder="Opcional"
+								autoComplete="off"
+								error={errors.email?.message}
+								{...register("email")}
+							/>
+							<Field
+								id="client-phone"
+								type="tel"
+								label="Teléfono"
+								placeholder="Opcional"
+								autoComplete="off"
+								error={errors.phone?.message}
+								{...register("phone")}
+							/>
+						</div>
 
-					<div>
-						<label htmlFor="client-notes" className="block text-sm font-medium text-primary">
-							Notas
-						</label>
-						<textarea
-							id="client-notes"
-							rows={3}
-							placeholder="Opcional"
-							className="mt-1 w-full rounded-md border border-line-strong bg-surface-sunken px-3 py-2 text-sm text-primary placeholder:text-tertiary outline-none transition-[border-color,box-shadow] duration-200 focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/20"
-							{...register("notes")}
-						/>
-						{errors.notes ? (
-							<p id="client-notes-error" role="alert" className="mt-1 text-sm text-danger">
-								{errors.notes.message}
-							</p>
-						) : null}
-					</div>
+						<div>
+							<label htmlFor="client-notes" className={fieldLabelClasses}>
+								Notas
+							</label>
+							<textarea
+								id="client-notes"
+								rows={3}
+								placeholder="Opcional"
+								className={`${textareaClasses} mt-1.5`}
+								{...register("notes")}
+							/>
+							{errors.notes ? (
+								<p id="client-notes-error" role="alert" className="mt-1.5 text-[13px] text-danger">
+									{errors.notes.message}
+								</p>
+							) : null}
+						</div>
+					</form>
+				</DialogBody>
 
-					<div className="flex justify-end gap-2 pt-2">
-						<Button type="button" variant="secondary" onClick={() => handleClose(false)}>
-							Cancelar
-						</Button>
-						<Button type="submit" disabled={isSubmitting}>
-							{isSubmitting ? <Loader2 aria-hidden className="size-4 animate-spin" /> : null}
-							{client ? "Guardar cambios" : "Crear cliente"}
-						</Button>
-					</div>
-				</form>
+				<DialogFooter>
+					<Button type="button" variant="secondary" onClick={() => handleClose(false)}>
+						Cancelar
+					</Button>
+					<Button type="submit" form="client-form" disabled={isSubmitting}>
+						{isSubmitting ? <Loader2 aria-hidden className="size-4 animate-spin" /> : null}
+						{client ? "Guardar cambios" : "Crear cliente"}
+					</Button>
+				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	);
