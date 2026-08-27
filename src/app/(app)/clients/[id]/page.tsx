@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ClientPanel } from "@/components/clients/client-panel";
 import { ClientStatusBadge } from "@/components/clients/client-status-badge";
 import { createClient } from "@/lib/supabase/server";
+import { calculateInvoiceTotal } from "@/lib/invoices/money";
 
 export const metadata = { title: "Cliente · ClientFlow" };
 
@@ -16,22 +17,47 @@ export default async function ClientDetailPage({
 	const { id } = await params;
 	const supabase = await createClient();
 
-	const [{ data: client }, { data: allClients }] = await Promise.all([
-		supabase
-			.from("clients")
-			.select(
-				"id, name, company, email, phone, notes, status, created_at, updated_at",
-			)
-			.eq("id", id)
-			.maybeSingle(),
-		supabase
-			.from("clients")
-			.select("id, name, status")
-			.order("created_at", { ascending: false }),
-	]);
+	const [{ data: client }, { data: allClients }, { data: invoices }] =
+		await Promise.all([
+			supabase
+				.from("clients")
+				.select(
+					"id, name, company, email, phone, notes, status, created_at, updated_at",
+				)
+				.eq("id", id)
+				.maybeSingle(),
+			supabase
+				.from("clients")
+				.select("id, name, status")
+				.order("created_at", { ascending: false }),
+			supabase
+				.from("invoices")
+				.select(
+					"id, invoice_number, status, currency, issue_date, items:invoice_items(quantity, unit_price)",
+				)
+				.eq("client_id", id)
+				.order("created_at", { ascending: false }),
+		]);
 
 	// RLS: un cliente de otro workspace simplemente no existe para esta consulta.
 	if (!client) notFound();
+
+	const invoiceRows = (invoices ?? []).map((inv) => {
+		const items = Array.isArray(inv.items) ? inv.items : [];
+		return {
+			id: inv.id,
+			invoiceNumber: inv.invoice_number,
+			status: inv.status,
+			total: calculateInvoiceTotal(items),
+			currency: inv.currency,
+			issueDate: inv.issue_date,
+		};
+	});
+
+	const allClientsList = (allClients ?? []).map((c) => ({
+		id: c.id,
+		name: c.name,
+	}));
 
 	return (
 		<div className="mx-auto max-w-6xl px-5 py-6 sm:px-8 lg:px-10">
@@ -82,6 +108,8 @@ export default async function ClientDetailPage({
 							createdAt: client.created_at,
 							updatedAt: client.updated_at,
 						}}
+						invoices={invoiceRows}
+						allClients={allClientsList}
 					/>
 				</div>
 			</div>

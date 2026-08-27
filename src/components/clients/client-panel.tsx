@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ClientFormDialog } from "@/components/clients/client-form-dialog";
 import { ClientStatusBadge } from "@/components/clients/client-status-badge";
 import { DeleteClientDialog } from "@/components/clients/delete-client-dialog";
+import { ClientInvoicesSection } from "@/components/invoices/client-invoices-section";
 import { Button } from "@/components/ui/button";
 
 export interface ClientDetailData {
@@ -36,7 +37,22 @@ function InfoRow({ label, value }: { label: string; value: string | null }) {
 	);
 }
 
-export function ClientPanel({ client }: { client: ClientDetailData }) {
+export function ClientPanel({
+	client,
+	invoices = [],
+	allClients = [],
+}: {
+	client: ClientDetailData;
+	invoices?: Array<{
+		id: string;
+		invoiceNumber: string;
+		status: string;
+		total: number;
+		currency: string;
+		issueDate: string;
+	}>;
+	allClients?: { id: string; name: string }[];
+}) {
 	const [editOpen, setEditOpen] = useState(false);
 	const [deleteOpen, setDeleteOpen] = useState(false);
 	const [pending, setPending] = useState<"edit" | "delete" | null>(null);
@@ -99,10 +115,10 @@ export function ClientPanel({ client }: { client: ClientDetailData }) {
 				<p className="mt-2 text-sm text-tertiary">Los proyectos de este cliente aparecerán aquí.</p>
 			</section>
 
-			<section className="py-4" aria-label="Facturación del cliente">
-				<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">Facturación</p>
-				<p className="mt-2 text-sm text-tertiary">Las facturas de este cliente aparecerán aquí.</p>
-			</section>
+			<ClientInvoicesSection
+				invoices={invoices}
+				clients={allClients}
+			/>
 
 			<p className="border-t border-line pt-3 font-mono text-[10px] text-tertiary">
 				Creado {dateTimeFormatter.format(new Date(client.createdAt))} · Actualizado{" "}

@@ -20,7 +20,7 @@ const modules = [
 	{ label: "Clientes", icon: Users, href: "/clients" },
 	{ label: "Proyectos", icon: FolderKanban, href: "/projects" },
 	{ label: "Entregables", icon: ListChecks, href: "/deliverables" },
-	{ label: "Facturas", icon: Receipt },
+	{ label: "Facturas", icon: Receipt, href: "/invoices" },
 ] as const;
 
 function Brand({ collapsed }: { collapsed: boolean }) {
