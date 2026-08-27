@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { ProjectDeliverablesSection } from "@/components/deliverables/project-deliverables-section";
+import { ProjectFilesSection } from "@/components/project-files/project-files-section";
 import { EditProjectButton } from "@/components/projects/edit-project-button";
 import { ProjectStatusBadge } from "@/components/projects/project-status-badge";
 import { formatDateOnly } from "@/lib/dates/date-only";
@@ -39,12 +40,13 @@ export default async function ProjectDetailPage({
 		{ data: clients },
 		{ data: allProjects },
 		{ data: deliverables },
+		{ data: projectFiles },
 	] =
 		await Promise.all([
 			supabase
 				.from("projects")
 				.select(
-					"id, name, description, status, budget, start_date, due_date, created_at, updated_at, client_id, client:clients(name)",
+					"id, name, description, status, budget, start_date, due_date, created_at, updated_at, client_id, workspace_id, client:clients(name)",
 				)
 				.eq("id", id)
 				.maybeSingle(),
@@ -56,6 +58,11 @@ export default async function ProjectDetailPage({
 			supabase
 				.from("deliverables")
 				.select("id, title, status, due_date")
+				.eq("project_id", id)
+				.order("created_at", { ascending: false }),
+			supabase
+				.from("project_files")
+				.select("id, file_name, mime_type, size_bytes, created_at")
 				.eq("project_id", id)
 				.order("created_at", { ascending: false }),
 		]);
@@ -178,6 +185,18 @@ export default async function ProjectDetailPage({
 							status: deliverable.status,
 							dueDate: deliverable.due_date,
 						}))}
+					/>
+
+					<ProjectFilesSection
+						files={(projectFiles ?? []).map((file) => ({
+							id: file.id,
+							fileName: file.file_name,
+							mimeType: file.mime_type,
+							sizeBytes: file.size_bytes,
+							createdAt: file.created_at,
+						}))}
+						projectId={project.id}
+						workspaceId={project.workspace_id}
 					/>
 
 					<p className="border-t border-line pt-3 font-mono text-[10px] text-tertiary">
