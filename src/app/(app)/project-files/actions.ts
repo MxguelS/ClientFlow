@@ -44,12 +44,16 @@ export async function createProjectFileAction(
 	const supabase = await createClient();
 
 	// Verificar que el proyecto existe y pertenece al workspace
-	const { data: project } = await supabase
+	const { data: project, error: projectError } = await supabase
 		.from("projects")
 		.select("id, workspace_id")
 		.eq("id", projectId)
 		.maybeSingle();
 
+	if (projectError) {
+		console.error("project lookup failed:", projectError.code, projectError.message);
+		return { status: "error", message: GENERIC_ERROR };
+	}
 	if (!project || project.workspace_id !== workspace.id) {
 		return { status: "project_not_found" };
 	}
@@ -104,18 +108,26 @@ export async function deleteProjectFileAction(
 	const supabase = await createClient();
 
 	// Obtener metadata del archivo, verificando acceso via project → workspace
-	const { data: file } = await supabase
+	const { data: file, error: fileError } = await supabase
 		.from("project_files")
 		.select("id, storage_path, project_id, project:projects(workspace_id)")
 		.eq("id", fileId)
 		.maybeSingle();
 
+	if (fileError) {
+		console.error("project file lookup failed:", fileError.code, fileError.message);
+		return { status: "error", message: GENERIC_ERROR };
+	}
 	if (!file) return { status: "file_not_found" };
 	const project =
 		typeof file.project === "object" && file.project !== null
 			? file.project
 			: null;
-	if (!project || project.workspace_id !== workspace.id) {
+	if (
+		!project ||
+		project.workspace_id !== workspace.id ||
+		file.project_id !== projectId
+	) {
 		return { status: "file_not_found" };
 	}
 
@@ -136,10 +148,12 @@ export async function deleteProjectFileAction(
 	}
 
 	// Luego eliminar metadata de DB
-	const { error } = await supabase
+	const { data: deleted, error } = await supabase
 		.from("project_files")
 		.delete()
-		.eq("id", fileId);
+		.eq("id", fileId)
+		.select("id")
+		.maybeSingle();
 
 	if (error) {
 		console.error(
@@ -153,6 +167,7 @@ export async function deleteProjectFileAction(
 				"El archivo se eliminó del almacenamiento pero no se pudo actualizar la base de datos.",
 		};
 	}
+	if (!deleted) return { status: "file_not_found" };
 
 	revalidatePath(`/projects/${projectId}`);
 	return { status: "success", id: fileId };
@@ -168,12 +183,16 @@ export async function getFileDownloadUrlAction(
 
 	const supabase = await createClient();
 
-	const { data: file } = await supabase
+	const { data: file, error: fileError } = await supabase
 		.from("project_files")
 		.select("id, storage_path, project_id, project:projects(workspace_id)")
 		.eq("id", fileId)
 		.maybeSingle();
 
+	if (fileError) {
+		console.error("project file lookup failed:", fileError.code, fileError.message);
+		return { status: "error", message: GENERIC_ERROR };
+	}
 	if (!file) return { status: "file_not_found" };
 	const project =
 		typeof file.project === "object" && file.project !== null

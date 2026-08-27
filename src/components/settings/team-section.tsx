@@ -237,6 +237,8 @@ export function TeamSection({
 			setInvitations((prev) => prev.filter((item) => item.id !== inviteId));
 		} else if (result.status === "error") {
 			setActionError(result.message);
+		} else if (result.status === "not_found") {
+			setActionError("La invitación ya no está disponible.");
 		}
 		setBusyId(null);
 	}
@@ -252,6 +254,8 @@ export function TeamSection({
 			refreshTeam();
 		} else if (result.status === "invalid") {
 			setActionError(result.message);
+		} else if (result.status === "not_found") {
+			setActionError("El miembro ya no está disponible.");
 		}
 		setBusyId(null);
 	}

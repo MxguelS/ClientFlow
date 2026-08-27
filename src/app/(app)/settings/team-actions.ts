@@ -26,6 +26,7 @@ export type TeamActionResult =
 	| { status: "not_authenticated" }
 	| { status: "no_workspace" }
 	| { status: "forbidden" }
+	| { status: "not_found" }
 	| { status: "invalid"; message: string }
 	| { status: "error"; message: string };
 
@@ -139,17 +140,20 @@ export async function revokeInviteAction(
 	if (!guard.ok) return guard.result;
 
 	const supabase = await createClient();
-	const { error } = await supabase
+	const { data: revoked, error } = await supabase
 		.from("workspace_invitations")
 		.update({ status: "revoked" })
 		.eq("id", inviteId)
 		.eq("workspace_id", guard.workspaceId)
-		.eq("status", "pending");
+		.eq("status", "pending")
+		.select("id")
+		.maybeSingle();
 
 	if (error) {
 		console.error("revoke failed:", error.code, error.message);
 		return { status: "error", message: GENERIC_ERROR };
 	}
+	if (!revoked) return { status: "not_found" };
 
 	invalidateShell();
 	return { status: "success" };
@@ -173,11 +177,13 @@ export async function updateMemberRoleAction(
 	}
 
 	const supabase = await createClient();
-	const { error } = await supabase
+	const { data: updated, error } = await supabase
 		.from("workspace_members")
 		.update({ role: parsed.data.role })
 		.eq("workspace_id", guard.workspaceId)
-		.eq("user_id", parsed.data.userId);
+		.eq("user_id", parsed.data.userId)
+		.select("user_id")
+		.maybeSingle();
 
 	if (error) {
 		console.error("role update failed:", error.code, error.message);
@@ -189,6 +195,7 @@ export async function updateMemberRoleAction(
 		}
 		return { status: "error", message: GENERIC_ERROR };
 	}
+	if (!updated) return { status: "not_found" };
 
 	invalidateShell();
 	return { status: "success" };
@@ -212,11 +219,13 @@ export async function removeMemberAction(
 	}
 
 	const supabase = await createClient();
-	const { error } = await supabase
+	const { data: removed, error } = await supabase
 		.from("workspace_members")
 		.delete()
 		.eq("workspace_id", guard.workspaceId)
-		.eq("user_id", parsed.data.userId);
+		.eq("user_id", parsed.data.userId)
+		.select("user_id")
+		.maybeSingle();
 
 	if (error) {
 		console.error("member delete failed:", error.code, error.message);
@@ -228,6 +237,7 @@ export async function removeMemberAction(
 		}
 		return { status: "error", message: GENERIC_ERROR };
 	}
+	if (!removed) return { status: "not_found" };
 
 	invalidateShell();
 	return { status: "success" };
@@ -273,11 +283,17 @@ export async function acceptInviteAction(
 		return { status: "error", message: GENERIC_ERROR };
 	}
 
-	const { data: ws } = await supabase
+	const { data: ws, error: workspaceError } = await supabase
 		.from("workspaces")
 		.select("name")
 		.eq("id", workspaceId)
 		.maybeSingle();
+
+	if (workspaceError) {
+		console.error("accepted workspace lookup failed:", workspaceError.code, workspaceError.message);
+		return { status: "error", message: GENERIC_ERROR };
+	}
+	if (!ws) return { status: "error", message: GENERIC_ERROR };
 
 	revalidatePath("/", "layout");
 	return {

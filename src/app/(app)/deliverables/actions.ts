@@ -31,12 +31,16 @@ export async function createDeliverableAction(
 	if (!workspace) return { status: "no_workspace" };
 
 	const supabase = await createClient();
-	const { data: project } = await supabase
+	const { data: project, error: projectError } = await supabase
 		.from("projects")
 		.select("id, workspace_id")
 		.eq("id", parsed.data.projectId)
 		.maybeSingle();
 
+	if (projectError) {
+		console.error("deliverable project lookup failed:", projectError.code, projectError.message);
+		return { status: "error", message: GENERIC_ERROR };
+	}
 	if (!project || project.workspace_id !== workspace.id) {
 		return { status: "project_not_found" };
 	}
@@ -79,7 +83,7 @@ export async function updateDeliverableAction(
 	if (!workspace) return { status: "no_workspace" };
 
 	const supabase = await createClient();
-	const [{ data: existing }, { data: project }] = await Promise.all([
+	const [{ data: existing, error: existingError }, { data: project, error: projectError }] = await Promise.all([
 		supabase
 			.from("deliverables")
 			.select("id, project_id, project:projects(workspace_id)")
@@ -92,6 +96,15 @@ export async function updateDeliverableAction(
 			.maybeSingle(),
 	]);
 
+	const lookupError = existingError ?? projectError;
+	if (lookupError) {
+		console.error(
+			"deliverable lookup failed:",
+			lookupError.code,
+			lookupError.message,
+		);
+		return { status: "error", message: GENERIC_ERROR };
+	}
 	if (!existing) return { status: "not_found" };
 	const existingProject =
 		typeof existing.project === "object" && existing.project !== null
@@ -104,7 +117,7 @@ export async function updateDeliverableAction(
 		return { status: "project_not_found" };
 	}
 
-	const { error } = await supabase
+	const { data: updated, error } = await supabase
 		.from("deliverables")
 		.update({
 			project_id: project.id,
@@ -113,12 +126,15 @@ export async function updateDeliverableAction(
 			status: parsed.data.status,
 			due_date: parsed.data.dueDate,
 		})
-		.eq("id", id);
+		.eq("id", id)
+		.select("id")
+		.maybeSingle();
 
 	if (error) {
 		console.error("deliverable update failed:", error.code, error.message);
 		return { status: "error", message: GENERIC_ERROR };
 	}
+	if (!updated) return { status: "not_found" };
 
 	revalidatePath("/deliverables");
 	revalidatePath(`/deliverables/${id}`);
@@ -136,12 +152,16 @@ export async function deleteDeliverableAction(
 	if (!workspace) return { status: "no_workspace" };
 
 	const supabase = await createClient();
-	const { data: existing } = await supabase
+	const { data: existing, error: existingError } = await supabase
 		.from("deliverables")
 		.select("id, project_id, project:projects(workspace_id)")
 		.eq("id", id)
 		.maybeSingle();
 
+	if (existingError) {
+		console.error("deliverable lookup failed:", existingError.code, existingError.message);
+		return { status: "error", message: GENERIC_ERROR };
+	}
 	if (!existing) return { status: "not_found" };
 	const project =
 		typeof existing.project === "object" && existing.project !== null
@@ -151,11 +171,17 @@ export async function deleteDeliverableAction(
 		return { status: "not_found" };
 	}
 
-	const { error } = await supabase.from("deliverables").delete().eq("id", id);
+	const { data: deleted, error } = await supabase
+		.from("deliverables")
+		.delete()
+		.eq("id", id)
+		.select("id")
+		.maybeSingle();
 	if (error) {
 		console.error("deliverable delete failed:", error.code, error.message);
 		return { status: "error", message: GENERIC_ERROR };
 	}
+	if (!deleted) return { status: "not_found" };
 
 	revalidatePath("/deliverables");
 	revalidatePath(`/projects/${existing.project_id}`);

@@ -78,15 +78,19 @@ export async function updateClientAction(
 	const supabase = await createClient();
 
 	// Lectura bajo RLS: solo visible si el usuario es miembro del workspace.
-	const { data: existing } = await supabase
+	const { data: existing, error: existingError } = await supabase
 		.from("clients")
 		.select("id")
 		.eq("id", id)
 		.maybeSingle();
 
+	if (existingError) {
+		console.error("client lookup failed:", existingError.code, existingError.message);
+		return { status: "error", message: GENERIC_ERROR };
+	}
 	if (!existing) return { status: "not_found" };
 
-	const { error } = await supabase
+	const { data: updated, error } = await supabase
 		.from("clients")
 		.update({
 			name: parsed.data.name,
@@ -96,12 +100,15 @@ export async function updateClientAction(
 			notes: parsed.data.notes,
 			status: parsed.data.status,
 		})
-		.eq("id", id);
+		.eq("id", id)
+		.select("id")
+		.maybeSingle();
 
 	if (error) {
 		console.error("client update failed:", error.code, error.message);
 		return { status: "error", message: GENERIC_ERROR };
 	}
+	if (!updated) return { status: "not_found" };
 
 	revalidatePath("/clients");
 	revalidatePath(`/clients/${id}`);
@@ -120,15 +127,24 @@ export async function deleteClientAction(
 
 	const supabase = await createClient();
 
-	const { data: existing } = await supabase
+	const { data: existing, error: existingError } = await supabase
 		.from("clients")
 		.select("id")
 		.eq("id", id)
 		.maybeSingle();
 
+	if (existingError) {
+		console.error("client lookup failed:", existingError.code, existingError.message);
+		return { status: "error", message: GENERIC_ERROR };
+	}
 	if (!existing) return { status: "not_found" };
 
-	const { error } = await supabase.from("clients").delete().eq("id", id);
+	const { data: deleted, error } = await supabase
+		.from("clients")
+		.delete()
+		.eq("id", id)
+		.select("id")
+		.maybeSingle();
 
 	if (error) {
 		if (error.code === "23503") {
@@ -141,6 +157,7 @@ export async function deleteClientAction(
 		console.error("client delete failed:", error.code, error.message);
 		return { status: "error", message: GENERIC_ERROR };
 	}
+	if (!deleted) return { status: "not_found" };
 
 	revalidatePath("/clients");
 	return { status: "success", id };

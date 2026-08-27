@@ -47,12 +47,20 @@ export async function createWorkspaceAction(
 
 	// RLS: solo se ven las membresías propias. Si ya tiene workspace,
 	// el onboarding no debe repetirse.
-	const { data: existingMembership } = await supabase
+	const { data: existingMembership, error: membershipLookupError } = await supabase
 		.from("workspace_members")
 		.select("workspace_id")
 		.limit(1)
 		.maybeSingle();
 
+	if (membershipLookupError) {
+		console.error(
+			"onboarding membership lookup failed:",
+			membershipLookupError.code,
+			membershipLookupError.message,
+		);
+		return { status: "error", message: "No se pudo comprobar el estado de tu workspace." };
+	}
 	if (existingMembership) {
 		return { status: "already_onboarded" };
 	}

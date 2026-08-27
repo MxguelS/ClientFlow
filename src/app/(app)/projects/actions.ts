@@ -42,12 +42,16 @@ export async function createProjectAction(
 
 	const supabase = await createClient();
 
-	const { data: client } = await supabase
+	const { data: client, error: clientError } = await supabase
 		.from("clients")
 		.select("id, workspace_id")
 		.eq("id", parsed.data.clientId)
 		.maybeSingle();
 
+	if (clientError) {
+		console.error("project client lookup failed:", clientError.code, clientError.message);
+		return { status: "error", message: GENERIC_ERROR };
+	}
 	if (!client || client.workspace_id !== workspace.id) {
 		return { status: "client_not_found" };
 	}
@@ -89,25 +93,33 @@ export async function updateProjectAction(
 
 	const supabase = await createClient();
 
-	const { data: existing } = await supabase
+	const { data: existing, error: existingError } = await supabase
 		.from("projects")
 		.select("id, workspace_id")
 		.eq("id", id)
 		.maybeSingle();
 
+	if (existingError) {
+		console.error("project lookup failed:", existingError.code, existingError.message);
+		return { status: "error", message: GENERIC_ERROR };
+	}
 	if (!existing) return { status: "not_found" };
 
-	const { data: client } = await supabase
+	const { data: client, error: clientError } = await supabase
 		.from("clients")
 		.select("id, workspace_id")
 		.eq("id", parsed.data.clientId)
 		.maybeSingle();
 
+	if (clientError) {
+		console.error("project client lookup failed:", clientError.code, clientError.message);
+		return { status: "error", message: GENERIC_ERROR };
+	}
 	if (!client || client.workspace_id !== existing.workspace_id) {
 		return { status: "client_not_found" };
 	}
 
-	const { error } = await supabase
+	const { data: updated, error } = await supabase
 		.from("projects")
 		.update({
 			name: parsed.data.name,
@@ -117,12 +129,15 @@ export async function updateProjectAction(
 			start_date: parsed.data.startDate,
 			due_date: parsed.data.dueDate,
 		})
-		.eq("id", id);
+		.eq("id", id)
+		.select("id")
+		.maybeSingle();
 
 	if (error) {
 		console.error("project update failed:", error.code, error.message);
 		return { status: "error", message: GENERIC_ERROR };
 	}
+	if (!updated) return { status: "not_found" };
 
 	revalidatePath("/projects");
 	revalidatePath(`/projects/${id}`);
