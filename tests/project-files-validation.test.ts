@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import {
 	validateFile,
 	sanitizeFileName,
@@ -143,5 +143,26 @@ describe("buildStoragePath", () => {
 		const a = buildStoragePath(wsId, projId, "test.pdf");
 		const b = buildStoragePath(wsId, projId, "test.pdf");
 		expect(a).not.toBe(b);
+	});
+
+	it("uses the Web Crypto UUID source available in client code", () => {
+		const original = globalThis.crypto.randomUUID;
+		const randomUUID = vi.fn(() => "11111111-1111-4111-8111-111111111111");
+		Object.defineProperty(globalThis.crypto, "randomUUID", {
+			configurable: true,
+			value: randomUUID,
+		});
+
+		try {
+			expect(buildStoragePath(wsId, projId, "test.pdf")).toContain(
+				"11111111-1111-4111-8111-111111111111",
+			);
+			expect(randomUUID).toHaveBeenCalledOnce();
+		} finally {
+			Object.defineProperty(globalThis.crypto, "randomUUID", {
+				configurable: true,
+				value: original,
+			});
+		}
 	});
 });

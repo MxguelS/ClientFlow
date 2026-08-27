@@ -123,21 +123,16 @@ describe("membership insert hardening migration", () => {
 	const migration = readFileSync(
 		resolve(
 			process.cwd(),
-			"supabase/migrations/20260827100000_workspace_members_insert_hardening.sql",
+			"supabase/migrations/20260827110000_workspace_invitation_status_guard.sql",
 		),
 		"utf8",
 	);
 
-	it("keeps only the empty-workspace owner bootstrap policy", () => {
-		expect(migration).toContain('drop policy if exists "workspace_members_insert"');
-		expect(migration).toContain('create policy "workspace_members_bootstrap_owner_only"');
-		expect(migration).toContain("role = 'owner'");
-		expect(migration).toContain("not exists");
+	it("contains only the invitation status guard", () => {
 		expect(migration).toContain(
-			"revoke all on function public.caller_workspace_role(uuid)",
+			"create function public.guard_workspace_invitation_status()",
 		);
-		expect(migration).toContain(
-			"revoke all on function public.can_manage_workspace(uuid)",
-		);
+		expect(migration).toContain("create trigger workspace_invitations_status_guard");
+		expect(migration).toContain("revoke all on function public.guard_workspace_invitation_status()");
 	});
 });

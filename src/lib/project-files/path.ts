@@ -1,5 +1,3 @@
-import { randomUUID } from "crypto";
-
 import { getFileExtension, sanitizeFileName } from "@/lib/project-files/validation";
 
 export function buildStoragePath(
@@ -9,6 +7,6 @@ export function buildStoragePath(
 ): string {
 	const safe = sanitizeFileName(fileName);
 	const ext = getFileExtension(safe);
-	const uuidPart = randomUUID();
+	const uuidPart = globalThis.crypto.randomUUID();
 	return `${workspaceId}/${projectId}/${uuidPart}${ext}`;
 }
