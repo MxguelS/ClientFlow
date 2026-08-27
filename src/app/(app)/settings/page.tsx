@@ -1,12 +1,19 @@
 import { Building2, User } from "lucide-react";
 
 import { ProfileForm } from "@/components/settings/profile-form";
+import {
+	TeamSection,
+	type TeamMemberRow,
+	type TeamInvitationRow,
+} from "@/components/settings/team-section";
 import { WorkspaceForm } from "@/components/settings/workspace-form";
 import { ThemeSelector } from "@/components/theme/theme-selector";
 import {
 	getCurrentUser,
 	getPrimaryMembership,
+	getPrimaryWorkspace,
 } from "@/lib/auth/session";
+import { isWorkspaceRole } from "@/lib/settings/team";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "Ajustes · ClientFlow" };
@@ -34,15 +41,50 @@ function SectionHeading({
 export default async function SettingsPage() {
 	const user = await getCurrentUser();
 	const membership = await getPrimaryMembership();
+	const workspace = await getPrimaryWorkspace();
 
 	const supabase = await createClient();
-	const { data: profile } = user
-		? await supabase
-				.from("profiles")
-				.select("full_name")
-				.eq("id", user.id)
-				.maybeSingle()
-		: { data: null };
+	const [{ data: profile }, { data: members }, { data: invitations }] =
+		await Promise.all([
+			user
+				? supabase
+						.from("profiles")
+						.select("full_name")
+						.eq("id", user.id)
+						.maybeSingle()
+				: Promise.resolve({ data: null } as const),
+			workspace
+				? supabase.rpc("list_workspace_members", {
+						p_workspace_id: workspace.id,
+					})
+				: Promise.resolve({ data: null } as const),
+			workspace
+				? supabase.rpc("list_workspace_invitations", {
+						p_workspace_id: workspace.id,
+					})
+				: Promise.resolve({ data: null } as const),
+		]);
+
+	const viewerRole = isWorkspaceRole(membership?.role)
+		? membership.role
+		: "member";
+
+	const teamMembers: TeamMemberRow[] = (members ?? []).map((row) => ({
+		userId: row.user_id,
+		role: row.role ?? "member",
+		fullName: row.full_name,
+		email: row.email,
+		joinedAt: row.joined_at ?? "",
+	}));
+
+	const pendingInvitations: TeamInvitationRow[] = (invitations ?? []).map(
+		(row) => ({
+			id: row.id,
+			email: row.email,
+			role: row.role,
+			expiresAt: row.expires_at ?? "",
+		}),
+	);
 
 	return (
 		<div className="mx-auto max-w-5xl px-5 py-6 sm:px-8 lg:px-10">
@@ -89,10 +131,17 @@ export default async function SettingsPage() {
 					</div>
 					<WorkspaceForm
 						name={membership?.workspaceName ?? ""}
-						canEdit={
-							membership?.role === "owner" || membership?.role === "admin"
-						}
+						canEdit={viewerRole === "owner" || viewerRole === "admin"}
 					/>
+
+					{user ? (
+						<TeamSection
+							currentUserId={user.id}
+							viewerRole={viewerRole}
+							initialMembers={teamMembers}
+							initialInvitations={pendingInvitations}
+						/>
+					) : null}
 				</section>
 
 				<section

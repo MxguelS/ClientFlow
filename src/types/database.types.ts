@@ -336,6 +336,56 @@ export type Database = {
           },
         ]
       }
+      workspace_invitations: {
+        Row: {
+          accepted_at: string | null
+          accepted_by: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string
+          role: string
+          status: string
+          token_hash: string
+          workspace_id: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invited_by?: string
+          role: string
+          status?: string
+          token_hash: string
+          workspace_id: string
+        }
+        Update: {
+          accepted_at?: string | null
+          accepted_by?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string
+          role?: string
+          status?: string
+          token_hash?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_invitations_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workspace_members: {
         Row: {
           created_at: string
@@ -394,6 +444,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_workspace_invitation: {
+        Args: { p_token: string }
+        Returns: string
+      }
+      caller_workspace_role: {
+        Args: { p_workspace_id: string }
+        Returns: string
+      }
+      can_access_project_storage: {
+        Args: { path_project_id: string; path_workspace_id: string }
+        Returns: boolean
+      }
+      can_manage_workspace: {
+        Args: { p_workspace_id: string }
+        Returns: boolean
+      }
       has_workspace_role: {
         Args: { allowed_roles: string[]; target_workspace_id: string }
         Returns: boolean
@@ -401,6 +467,27 @@ export type Database = {
       is_workspace_member: {
         Args: { target_workspace_id: string }
         Returns: boolean
+      }
+      list_workspace_invitations: {
+        Args: { p_workspace_id: string }
+        Returns: {
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          role: string
+          status: string
+        }[]
+      }
+      list_workspace_members: {
+        Args: { p_workspace_id: string }
+        Returns: {
+          email: string
+          full_name: string
+          joined_at: string
+          role: string
+          user_id: string
+        }[]
       }
     }
     Enums: {
