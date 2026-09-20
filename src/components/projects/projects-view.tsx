@@ -58,29 +58,17 @@ export function ProjectsView({
 	const hasProjects = projects.length > 0;
 
 	return (
-		<div>
-			<div className="flex items-center justify-between gap-4">
-				<h1 className="text-2xl font-semibold tracking-[-0.03em] text-primary">Proyectos</h1>
-				{clients.length > 0 ? (
-					<Button type="button" onClick={() => setCreateOpen(true)}>
-						<Plus aria-hidden="true" className="size-4" />
-						Nuevo proyecto
-					</Button>
-				) : null}
+		<div className="cf-page-enter">
+			<div className="flex items-center justify-between gap-4 border-b border-line pb-5">
+				<h1 className="text-2xl font-semibold tracking-[-0.03em] text-primary">Proyectos <span className="ml-2 text-sm font-normal tracking-normal text-secondary">{projects.length}</span></h1>
+				<Button type="button" onClick={() => setCreateOpen(true)}>
+					<Plus aria-hidden="true" className="size-4" />
+					Nuevo proyecto
+				</Button>
 			</div>
 
-			{!hasProjects && clients.length === 0 ? (
-				<div className="mt-6 border-y border-line py-14 text-center">
-					<p className="text-sm font-medium text-primary">Primero necesitas un cliente.</p>
-					<p className="mx-auto mt-1.5 max-w-sm text-sm leading-6 text-secondary">
-						Los proyectos se asocian siempre a un cliente de tu workspace.
-					</p>
-					<Link href="/clients" className="mt-5 inline-flex h-10 items-center rounded-md border border-line-strong bg-surface-raised px-4 text-sm font-medium text-primary transition-colors hover:bg-surface-hover">
-						Ir a Clientes
-					</Link>
-				</div>
-			) : !hasProjects ? (
-				<div className="mt-6 border-y border-line py-14 text-center">
+			{!hasProjects ? (
+				<div className="mt-6 border-y border-line py-10 text-center">
 					<p className="text-sm font-medium text-primary">Todavía no hay proyectos.</p>
 					<p className="mx-auto mt-1.5 max-w-sm text-sm leading-6 text-secondary">
 						Crea tu primer proyecto para organizar el trabajo de tus clientes.
@@ -113,7 +101,7 @@ export function ProjectsView({
 						</div>
 					) : (
 						<div className="mt-4 border-y border-line">
-							<div className="hidden grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)_140px_110px] gap-4 border-b border-line px-3 py-2.5 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary md:grid">
+							<div className="hidden grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)_140px_110px] gap-4 border-b border-line px-3 py-2.5 text-xs font-medium text-secondary md:grid">
 								<span>Nombre</span>
 								<span>Cliente</span>
 								<span>Estado</span>
@@ -149,9 +137,7 @@ export function ProjectsView({
 				</>
 			)}
 
-			{clients.length > 0 ? (
-				<ProjectFormDialog open={createOpen} onOpenChange={setCreateOpen} clients={clients} />
-			) : null}
+			<ProjectFormDialog open={createOpen} onOpenChange={setCreateOpen} clients={clients} />
 		</div>
 	);
 }

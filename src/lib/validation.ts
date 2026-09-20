@@ -37,6 +37,22 @@ export const loginSchema = z.object({
 
 export type LoginInput = z.infer<typeof loginSchema>;
 
+export const passwordRecoveryRequestSchema = z.object({ email: emailField });
+
+export type PasswordRecoveryRequestInput = z.infer<typeof passwordRecoveryRequestSchema>;
+
+export const passwordResetSchema = z
+	.object({
+		password: passwordField,
+		confirmPassword: z.string().min(1, "Confirma tu contraseña"),
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: "Las contraseñas no coinciden",
+		path: ["confirmPassword"],
+	});
+
+export type PasswordResetInput = z.infer<typeof passwordResetSchema>;
+
 export const onboardingSchema = z.object({
 	workspaceName: z
 		.string()

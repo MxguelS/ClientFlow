@@ -55,9 +55,9 @@ export function ClientsView({ clients }: { clients: ClientRow[] }) {
 	const hasClients = clients.length > 0;
 
 	return (
-		<div>
-			<div className="flex items-center justify-between gap-4">
-				<h1 className="text-2xl font-semibold tracking-[-0.03em] text-primary">Clientes</h1>
+		<div className="cf-page-enter">
+			<div className="flex items-center justify-between gap-4 border-b border-line pb-5">
+				<h1 className="text-2xl font-semibold tracking-[-0.03em] text-primary">Clientes <span className="ml-2 text-sm font-normal tracking-normal text-secondary">{clients.length}</span></h1>
 				<Button type="button" onClick={() => setCreateOpen(true)}>
 					<Plus aria-hidden="true" className="size-4" />
 					Nuevo cliente
@@ -79,10 +79,10 @@ export function ClientsView({ clients }: { clients: ClientRow[] }) {
 			) : null}
 
 			{!hasClients ? (
-				<div className="mt-6 border-y border-line py-14 text-center">
+				<div className="mt-6 border-y border-line py-10 text-center">
 					<p className="text-sm font-medium text-primary">Todavía no hay clientes.</p>
 					<p className="mx-auto mt-1.5 max-w-sm text-sm leading-6 text-secondary">
-						Crea tu primer cliente para empezar a asociar proyectos y facturación.
+						Agrega tu primer cliente para mantener sus proyectos y datos organizados.
 					</p>
 					<Button type="button" variant="secondary" className="mt-5" onClick={() => setCreateOpen(true)}>
 						<Plus aria-hidden="true" className="size-4" />
@@ -98,7 +98,7 @@ export function ClientsView({ clients }: { clients: ClientRow[] }) {
 				</div>
 			) : (
 				<div className="mt-4 border-y border-line">
-					<div className="hidden grid-cols-[minmax(0,2.2fr)_minmax(0,1.6fr)_120px_110px] gap-4 border-b border-line px-3 py-2.5 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary md:grid">
+					<div className="hidden grid-cols-[minmax(0,2.2fr)_minmax(0,1.6fr)_120px_110px] gap-4 border-b border-line px-3 py-2.5 text-xs font-medium text-secondary md:grid">
 						<span>Nombre</span>
 						<span>Email</span>
 						<span>Estado</span>

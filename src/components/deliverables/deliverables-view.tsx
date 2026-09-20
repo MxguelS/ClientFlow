@@ -65,11 +65,9 @@ export function DeliverablesView({
 	const hasDeliverables = deliverables.length > 0;
 
 	return (
-		<div>
-			<div className="flex items-center justify-between gap-4">
-				<h1 className="text-2xl font-semibold tracking-[-0.03em] text-primary">
-					Entregables
-				</h1>
+		<div className="cf-page-enter">
+			<div className="flex items-end justify-between gap-4 border-b border-line pb-5">
+				<div><h1 className="text-2xl font-semibold tracking-[-0.03em] text-primary">Entregables <span className="ml-2 text-sm font-normal tracking-normal text-secondary">{deliverables.length}</span></h1><p className="mt-1.5 max-w-lg text-sm text-secondary">Organiza lo que debes completar y entregar en cada proyecto.</p></div>
 				{projects.length > 0 ? (
 					<Button type="button" onClick={() => setCreateOpen(true)}>
 						<Plus aria-hidden="true" className="size-4" />
@@ -79,7 +77,7 @@ export function DeliverablesView({
 			</div>
 
 			{!hasDeliverables && projects.length === 0 ? (
-				<div className="mt-6 border-y border-line py-14 text-center">
+				<div className="mt-6 border-y border-line py-10 text-center">
 					<p className="text-sm font-medium text-primary">
 						Primero necesitas un proyecto.
 					</p>
@@ -94,12 +92,12 @@ export function DeliverablesView({
 					</Link>
 				</div>
 			) : !hasDeliverables ? (
-				<div className="mt-6 border-y border-line py-14 text-center">
+				<div className="mt-6 border-y border-line py-10 text-center">
 					<p className="text-sm font-medium text-primary">
 						Todavía no hay entregables.
 					</p>
 					<p className="mx-auto mt-1.5 max-w-sm text-sm leading-6 text-secondary">
-						Crea el primero para organizar el trabajo de tus proyectos.
+						Los entregables son resultados concretos de un proyecto, como un diseño, documento, video o versión final.
 					</p>
 					<Button
 						type="button"
@@ -158,7 +156,7 @@ export function DeliverablesView({
 						</div>
 					) : (
 						<div className="mt-4 border-y border-line">
-							<div className="hidden grid-cols-[minmax(0,2fr)_minmax(0,1.5fr)_140px_120px] gap-4 border-b border-line px-3 py-2.5 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary md:grid">
+							<div className="hidden grid-cols-[minmax(0,2fr)_minmax(0,1.5fr)_140px_120px] gap-4 border-b border-line px-3 py-2.5 text-xs font-medium text-secondary md:grid">
 								<span>Título</span>
 								<span>Proyecto</span>
 								<span>Estado</span>

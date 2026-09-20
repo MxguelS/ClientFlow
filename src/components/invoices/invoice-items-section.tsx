@@ -133,7 +133,7 @@ export function InvoiceItemsSection({
 	return (
 		<section aria-label="Líneas de factura" className="py-4">
 			<div className="flex items-center justify-between gap-3">
-				<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+				<p className="text-sm font-semibold text-primary">
 					Líneas
 				</p>
 				{!adding && editingId === null ? (
@@ -154,7 +154,7 @@ export function InvoiceItemsSection({
 				<p className="mt-3 text-sm text-tertiary">Esta factura no tiene líneas.</p>
 			) : (
 				<div className="mt-3 border-y border-line">
-					<div className="hidden grid-cols-[minmax(0,3fr)_80px_100px_100px_60px] gap-3 border-b border-line px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary md:grid">
+					<div className="hidden grid-cols-[minmax(0,3fr)_80px_100px_100px_60px] gap-3 border-b border-line px-3 py-2 text-xs font-medium text-secondary md:grid">
 						<span>Descripción</span>
 						<span className="text-right">Cantidad</span>
 						<span className="text-right">Precio</span>
@@ -294,7 +294,7 @@ export function InvoiceItemsSection({
 
 					{items.length > 0 ? (
 						<div className="flex items-center justify-end gap-4 border-t border-line px-3 py-3">
-							<span className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+							<span className="text-xs font-medium text-secondary">
 								Total
 							</span>
 							<span className="font-mono text-sm font-semibold text-primary">

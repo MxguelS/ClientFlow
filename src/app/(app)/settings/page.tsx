@@ -89,7 +89,7 @@ export default async function SettingsPage() {
 	return (
 		<div className="mx-auto max-w-5xl px-5 py-6 sm:px-8 lg:px-10">
 			<header className="border-b border-line pb-5">
-				<p className="font-mono text-[10px] uppercase tracking-[0.18em] text-tertiary">
+				<p className="text-sm font-medium text-secondary">
 					Cuenta y preferencias
 				</p>
 				<h1 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-primary sm:text-3xl">
@@ -103,7 +103,7 @@ export default async function SettingsPage() {
 			<div className="mt-6 space-y-6 pb-10">
 				<section
 					aria-labelledby="settings-profile-heading"
-					className="rounded-lg border border-line bg-surface-raised p-4 sm:p-5"
+					className="border-b border-line py-5 sm:py-6"
 				>
 					<div id="settings-profile-heading">
 						<SectionHeading
@@ -120,7 +120,7 @@ export default async function SettingsPage() {
 
 				<section
 					aria-labelledby="settings-workspace-heading"
-					className="rounded-lg border border-line bg-surface-raised p-4 sm:p-5"
+					className="border-b border-line py-5 sm:py-6"
 				>
 					<div id="settings-workspace-heading">
 						<SectionHeading
@@ -146,9 +146,9 @@ export default async function SettingsPage() {
 
 				<section
 					aria-labelledby="settings-appearance-heading"
-					className="rounded-lg border border-line bg-surface-raised p-4 sm:p-5"
+					className="border-b border-line py-5 sm:py-6"
 				>
-					{/* El selector ya expone sus subsecciones Appearance / Accent theme. */}
+					{/* El selector mantiene las tres opciones de apariencia aprobadas. */}
 					<span id="settings-appearance-heading" className="sr-only">
 						Apariencia
 					</span>

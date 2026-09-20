@@ -29,7 +29,7 @@ export function ClientInvoicesSection({
 	return (
 		<section className="border-b border-line py-4" aria-label="Facturación del cliente">
 			<div className="flex items-center justify-between gap-3">
-				<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+				<p className="text-sm font-semibold text-primary">
 					Facturación
 				</p>
 				<Button type="button" variant="ghost" size="sm" onClick={() => setCreateOpen(true)}>

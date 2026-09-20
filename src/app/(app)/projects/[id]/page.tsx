@@ -19,7 +19,7 @@ const dateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
 	return (
 		<div className="flex items-baseline justify-between gap-6 py-2.5">
-			<span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">{label}</span>
+		<span className="shrink-0 text-xs font-medium text-secondary">{label}</span>
 			<span className="min-w-0 truncate text-right text-sm text-primary">
 				{value ?? <span className="text-tertiary">—</span>}
 			</span>
@@ -72,7 +72,7 @@ export default async function ProjectDetailPage({
 	const clientName =
 		typeof project.client === "object" && project.client !== null
 			? (project.client.name as string)
-			: "";
+			: "Sin cliente";
 
 	const budgetFormatter = new Intl.NumberFormat("es-ES", {
 		style: "currency",
@@ -81,7 +81,7 @@ export default async function ProjectDetailPage({
 	});
 
 	return (
-		<div className="mx-auto max-w-6xl px-5 py-6 sm:px-8 lg:px-10">
+		<div className="cf-page-enter mx-auto max-w-6xl px-5 py-6 sm:px-8 lg:px-10">
 			<Link
 				href="/projects"
 				className="inline-flex items-center gap-1.5 text-sm text-secondary transition-colors hover:text-primary"
@@ -92,7 +92,7 @@ export default async function ProjectDetailPage({
 
 			<div className="mt-4 grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-10">
 				<aside className="hidden lg:block" aria-label="Lista de proyectos">
-					<p className="border-b border-line pb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+					<p className="border-b border-line pb-2 text-xs font-medium text-secondary">
 						Todos los proyectos
 					</p>
 					<ul className="mt-1">
@@ -145,9 +145,7 @@ export default async function ProjectDetailPage({
 						<InfoRow
 							label="Cliente"
 							value={
-								<Link href={`/clients/${project.client_id}`} className="text-accent hover:underline">
-									{clientName}
-								</Link>
+								project.client_id ? <Link href={`/clients/${project.client_id}`} className="text-accent hover:underline">{clientName}</Link> : <span className="text-secondary">{clientName}</span>
 							}
 						/>
 						<InfoRow
@@ -165,7 +163,7 @@ export default async function ProjectDetailPage({
 					</section>
 
 					<section className="py-4" aria-label="Descripción del proyecto">
-						<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">Descripción</p>
+						<p className="text-xs font-medium text-secondary">Descripción</p>
 						{project.description ? (
 							<p className="mt-2 whitespace-pre-line text-sm leading-6 text-secondary">{project.description}</p>
 						) : (

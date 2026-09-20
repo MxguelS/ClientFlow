@@ -14,13 +14,11 @@ export function EmptyState({
 	label?: string;
 }) {
 	return (
-		<div className="flex min-h-40 flex-col items-center justify-center px-5 py-8 text-center">
-			<div className="mb-3 flex size-10 items-center justify-center rounded-xl border border-accent/15 bg-accent-soft text-accent">
-				<Icon aria-hidden="true" className="size-5" strokeWidth={1.7} />
-			</div>
+		<div className="cf-page-enter flex min-h-40 flex-col items-center justify-center border-y border-line px-5 py-8 text-center">
+			<Icon aria-hidden="true" className="mb-3 size-4 text-secondary" strokeWidth={1.7} />
 			<h3 className="text-sm font-medium text-primary">{title}</h3>
 			<p className="mt-1 max-w-xs text-xs leading-5 text-secondary">{description}</p>
-			<Badge className="mt-3" variant="neutral">{label}</Badge>
+			{label ? <Badge className="mt-3" variant="neutral">{label}</Badge> : null}
 		</div>
 	);
 }

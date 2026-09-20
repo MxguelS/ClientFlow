@@ -5,7 +5,7 @@ import { z } from "zod";
  *
  * Constraints REALES de PostgreSQL reflejadas:
  * - name: check (char_length between 1 and 150)
- * - client_id: uuid NOT NULL (FK -> clients ON DELETE RESTRICT)
+ * - client_id: uuid nullable (FK -> clients ON DELETE RESTRICT)
  * - status: check in ('planning','active','on_hold','completed','cancelled')
  * - budget: numeric(12,2) nullable, check (>= 0) -> max 9.999.999.999,99
  * - start_date/due_date: date nullable
@@ -73,7 +73,9 @@ export const projectFormSchema = z
 			.trim()
 			.min(1, "El nombre es obligatorio")
 			.max(150, "El nombre no puede superar 150 caracteres"),
-		clientId: z.string().uuid("Selecciona un cliente válido"),
+		clientId: z
+			.union([z.string().uuid("Selecciona un cliente válido"), z.literal(""), z.null(), z.undefined()])
+			.transform((value) => value === "" || value === undefined ? null : value),
 		status: z.enum(PROJECT_STATUSES).default("planning"),
 		budget: optionalBudget,
 		startDate: optionalDate,

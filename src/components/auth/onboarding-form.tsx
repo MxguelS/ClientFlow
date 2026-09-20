@@ -114,8 +114,8 @@ export function OnboardingForm() {
 				})}
 			/>
 
-			<p className="text-xs text-neutral-500">
-				Identificador público:{" "}
+			<p className="text-xs leading-5 text-secondary">
+				Este identificador se usa en los enlaces públicos de tu workspace:{" "}
 				<code className="rounded bg-neutral-100 px-1 py-0.5 font-mono text-neutral-700">
 					{slugPreview}
 				</code>

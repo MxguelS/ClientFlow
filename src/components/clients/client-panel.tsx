@@ -29,7 +29,7 @@ const dateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
 function InfoRow({ label, value }: { label: string; value: string | null }) {
 	return (
 		<div className="flex items-baseline justify-between gap-6 py-2.5">
-			<span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">{label}</span>
+			<span className="shrink-0 text-xs font-medium text-secondary">{label}</span>
 			<span className="min-w-0 truncate text-right text-sm text-primary">
 				{value ?? <span className="text-tertiary">—</span>}
 			</span>
@@ -102,7 +102,7 @@ export function ClientPanel({
 			</section>
 
 			<section className="border-b border-line py-4" aria-label="Notas">
-				<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">Notas</p>
+				<p className="text-sm font-semibold text-primary">Notas</p>
 				{client.notes ? (
 					<p className="mt-2 whitespace-pre-line text-sm leading-6 text-secondary">{client.notes}</p>
 				) : (
@@ -111,7 +111,7 @@ export function ClientPanel({
 			</section>
 
 			<section className="border-b border-line py-4" aria-label="Proyectos del cliente">
-				<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">Proyectos</p>
+				<p className="text-sm font-semibold text-primary">Proyectos</p>
 				<p className="mt-2 text-sm text-tertiary">Los proyectos de este cliente aparecerán aquí.</p>
 			</section>
 

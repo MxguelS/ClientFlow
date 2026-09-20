@@ -7,12 +7,12 @@ import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
  * (ver globals.css) para evitar el doble anillo.
  */
 const fieldBase =
-	"w-full rounded-md border border-line bg-surface-sunken text-sm text-primary placeholder:text-tertiary outline-none transition-[border-color,box-shadow] duration-150 hover:border-line-strong focus-visible:border-accent/60 focus-visible:ring-2 focus-visible:ring-accent/15 disabled:cursor-not-allowed disabled:opacity-55";
+	"w-full rounded-md border border-line bg-surface-sunken text-sm text-primary placeholder:text-secondary outline-none transition-[background-color,border-color,box-shadow] duration-150 hover:border-line-strong focus-visible:border-primary/60 focus-visible:bg-surface-raised focus-visible:ring-2 focus-visible:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-55";
 
 const fieldInvalid =
 	"border-danger/70 hover:border-danger focus-visible:border-danger focus-visible:ring-danger/15";
 
-export const inputClasses = `h-9 px-3 ${fieldBase}`;
+export const inputClasses = `h-11 px-3 ${fieldBase}`;
 
 export const selectClasses = `h-9 cursor-pointer px-3 pr-8 ${fieldBase}`;
 

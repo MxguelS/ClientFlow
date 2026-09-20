@@ -23,8 +23,8 @@ export default async function OnboardingPage() {
 
 	return (
 		<AuthLayout
-			title="Crea tu workspace"
-			subtitle="Es el espacio donde vivirán tus clientes, proyectos y facturas."
+			title="Crea tu workspace (o espacio de trabajo)"
+			subtitle="Este será el espacio donde organizarás tus clientes, proyectos, entregables y facturas."
 		>
 			<OnboardingForm />
 		</AuthLayout>

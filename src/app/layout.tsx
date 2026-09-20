@@ -1,12 +1,9 @@
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import Script from "next/script";
 
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { THEME_SCRIPT } from "@/lib/theme/script";
 
-import "@fontsource/dm-serif-display/400.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -22,9 +19,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="es" suppressHydrationWarning>
-			<body
-				className={`${GeistSans.variable} ${GeistMono.variable} min-h-screen antialiased`}
-			>
+			<body className="min-h-screen antialiased">
 				<Script id="clientflow-theme" strategy="beforeInteractive">
 					{THEME_SCRIPT}
 				</Script>

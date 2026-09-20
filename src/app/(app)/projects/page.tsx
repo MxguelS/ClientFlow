@@ -25,7 +25,7 @@ export default async function ProjectsPage() {
 		clientName:
 			typeof project.client === "object" && project.client !== null
 				? (project.client.name as string)
-				: "",
+				: "Sin cliente",
 		status: project.status,
 		createdAt: project.created_at,
 	}));

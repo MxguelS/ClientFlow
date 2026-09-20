@@ -32,6 +32,26 @@ describe("projectFormSchema", () => {
 		).toBe(false);
 	});
 
+	it("permite crear un proyecto sin cliente cuando el workspace no tiene clientes", () => {
+		const withoutClient = projectFormSchema.safeParse({ ...base, clientId: null });
+		const emptySelection = projectFormSchema.safeParse({ ...base, clientId: "" });
+
+		expect(withoutClient.success).toBe(true);
+		expect(emptySelection.success).toBe(true);
+		if (withoutClient.success) expect(withoutClient.data.clientId).toBeNull();
+		if (emptySelection.success) expect(emptySelection.data.clientId).toBeNull();
+	});
+
+	it("permite editar un proyecto sin cliente o asignarlo después", () => {
+		const withoutClient = projectFormSchema.parse({ ...base, clientId: null });
+		const assignedLater = projectFormSchema.parse({ ...base, clientId: base.clientId });
+		const removedAgain = projectFormSchema.parse({ ...base, clientId: "" });
+
+		expect(withoutClient.clientId).toBeNull();
+		expect(assignedLater.clientId).toBe(base.clientId);
+		expect(removedAgain.clientId).toBeNull();
+	});
+
 	it("rechaza status fuera del enum real", () => {
 		expect(
 			projectFormSchema.safeParse({ ...base, status: "urgent" }).success,

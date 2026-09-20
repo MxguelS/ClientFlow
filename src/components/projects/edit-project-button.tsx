@@ -13,7 +13,7 @@ export function EditProjectButton({
 	project: {
 		id: string;
 		name: string;
-		clientId: string;
+		clientId: string | null;
 		description: string | null;
 		status: string;
 		budget: number | null;

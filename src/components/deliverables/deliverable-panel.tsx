@@ -21,7 +21,7 @@ const dateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
 	return (
 		<div className="flex items-baseline justify-between gap-6 py-2.5">
-			<span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+			<span className="shrink-0 text-xs font-medium text-secondary">
 				{label}
 			</span>
 			<span className="min-w-0 truncate text-right text-sm text-primary">
@@ -40,7 +40,7 @@ export function DeliverablePanel({
 		title: string;
 		projectId: string;
 		projectName: string;
-		clientId: string;
+		clientId: string | null;
 		clientName: string;
 		description: string | null;
 		status: string;
@@ -83,7 +83,7 @@ export function DeliverablePanel({
 				/>
 				<InfoRow
 					label="Cliente"
-					value={<Link href={`/clients/${deliverable.clientId}`} className="text-accent hover:underline">{deliverable.clientName}</Link>}
+					value={deliverable.clientId ? <Link href={`/clients/${deliverable.clientId}`} className="text-accent hover:underline">{deliverable.clientName}</Link> : <span className="text-secondary">Sin cliente</span>}
 				/>
 				<InfoRow
 					label="Fecha límite"
@@ -92,7 +92,7 @@ export function DeliverablePanel({
 			</section>
 
 			<section className="py-4" aria-label="Descripción del entregable">
-				<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">Descripción</p>
+				<p className="text-sm font-semibold text-primary">Descripción</p>
 				{deliverable.description ? (
 					<p className="mt-2 whitespace-pre-line text-sm leading-6 text-secondary">
 						{deliverable.description}

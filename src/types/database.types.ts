@@ -282,7 +282,7 @@ export type Database = {
       projects: {
         Row: {
           budget: number | null
-          client_id: string
+          client_id: string | null
           created_at: string
           description: string | null
           due_date: string | null
@@ -295,7 +295,7 @@ export type Database = {
         }
         Insert: {
           budget?: number | null
-          client_id: string
+          client_id: string | null
           created_at?: string
           description?: string | null
           due_date?: string | null
@@ -308,7 +308,7 @@ export type Database = {
         }
         Update: {
           budget?: number | null
-          client_id?: string
+          client_id?: string | null
           created_at?: string
           description?: string | null
           due_date?: string | null
@@ -624,4 +624,3 @@ export const Constants = {
     Enums: {},
   },
 } as const
-

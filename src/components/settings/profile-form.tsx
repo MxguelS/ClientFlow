@@ -88,7 +88,7 @@ export function ProfileForm({
 					Email
 				</span>
 				<p
-					className="mt-1.5 font-mono text-sm text-secondary"
+					className="mt-1.5 text-sm text-secondary"
 					aria-labelledby="settings-profile-email-label"
 				>
 					{email}

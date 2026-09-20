@@ -1,10 +1,9 @@
 "use client";
 
-import { Menu, Search, SunMedium } from "lucide-react";
+import { Maximize2, Menu, PanelLeft, Search, SunMedium } from "lucide-react";
 
 import { Kbd } from "@/components/ui/kbd";
 import { Tooltip } from "@/components/ui/tooltip";
-import { WindowControls } from "@/components/shell/window-controls";
 
 export function Topbar({
 	workspaceName,
@@ -22,9 +21,10 @@ export function Topbar({
 	onOpenMobileNav: () => void;
 }) {
 	return (
-		<header className="relative z-[var(--z-topbar)] flex h-12 shrink-0 items-center border-b border-line bg-surface/80 px-3 backdrop-blur-sm md:px-4">
+		<header className="relative z-[var(--z-topbar)] flex h-12 shrink-0 items-center border-b border-line bg-surface px-3 md:px-4">
 			<div className="hidden items-center gap-4 md:flex">
-				<WindowControls maximized={maximized} onToggleSidebar={onToggleSidebar} onToggleMaximized={onToggleMaximized} />
+				<button type="button" aria-label="Alternar barra lateral" onClick={onToggleSidebar} className="inline-flex size-7 items-center justify-center rounded-md text-tertiary transition-colors hover:bg-surface-hover hover:text-primary"><PanelLeft aria-hidden="true" className="size-3.5" /></button>
+				<button type="button" aria-label={maximized ? "Restaurar ventana" : "Maximizar ventana"} onClick={onToggleMaximized} className="inline-flex size-7 items-center justify-center rounded-md text-tertiary transition-colors hover:bg-surface-hover hover:text-primary"><Maximize2 aria-hidden="true" className="size-3.5" /></button>
 				<div className="h-4 w-px bg-line-strong" />
 				<span className="text-xs font-medium text-secondary">{workspaceName}</span>
 			</div>

@@ -31,9 +31,10 @@ export function ProjectDeliverablesSection({
 	return (
 		<section className="border-t border-line py-4" aria-label="Entregables del proyecto">
 			<div className="flex items-center justify-between gap-3">
-				<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+				<p className="text-sm font-semibold text-primary">
 					Entregables
 				</p>
+				<p className="mt-1 text-xs text-secondary">Resultados o trabajos que debes completar para este proyecto.</p>
 				<Button type="button" variant="ghost" size="sm" onClick={() => setCreateOpen(true)}>
 					<Plus aria-hidden="true" className="size-3.5" />
 					Crear entregable
@@ -41,8 +42,8 @@ export function ProjectDeliverablesSection({
 			</div>
 
 			{deliverables.length === 0 ? (
-				<p className="mt-2 text-sm text-tertiary">
-					Este proyecto todavía no tiene entregables.
+				<p className="mt-2 max-w-lg text-sm leading-6 text-tertiary">
+					Aquí puedes registrar resultados como diseños, documentos, videos o versiones finales.
 				</p>
 			) : (
 				<ul className="mt-2 border-y border-line">

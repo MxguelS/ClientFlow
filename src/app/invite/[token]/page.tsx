@@ -21,8 +21,8 @@ export default async function InvitePage({
 	const validShape = TOKEN_PATTERN.test(token);
 
 	return (
-		<div className="flex min-h-svh items-center justify-center px-5 py-10">
-			<div className="w-full max-w-md rounded-lg border border-line bg-surface-raised p-6">
+		<div className="flex min-h-svh items-center justify-center bg-background px-5 py-10">
+			<div className="cf-page-enter w-full max-w-md border-l border-line-strong bg-transparent px-6 py-2">
 				<div className="flex items-center gap-2.5">
 					<ShieldQuestion aria-hidden="true" className="size-4 text-accent" />
 					<h1 className="text-lg font-semibold tracking-[-0.02em] text-primary">
@@ -42,7 +42,7 @@ export default async function InvitePage({
 						/>
 						<p className="mt-4 text-xs leading-5 text-tertiary">
 							Si necesitas iniciar sesión primero,{" "}
-							<Link href="/login" className="text-accent hover:underline">
+							<Link href="/login" className="text-primary underline underline-offset-4 hover:text-white">
 								accede aquí
 							</Link>{" "}
 							y vuelve a abrir este enlace.

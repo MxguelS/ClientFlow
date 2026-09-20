@@ -18,7 +18,7 @@ const dateTimeFormatter = new Intl.DateTimeFormat("es-ES", {
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
 	return (
 		<div className="flex items-baseline justify-between gap-6 py-2.5">
-			<span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+			<span className="shrink-0 text-xs font-medium text-secondary">
 				{label}
 			</span>
 			<span className="min-w-0 truncate text-right text-sm text-primary">
@@ -82,7 +82,7 @@ export function InvoicePanel({
 			</section>
 
 			<section className="border-b border-line py-4" aria-label="Notas de la factura">
-				<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">Notas</p>
+			<p className="text-sm font-semibold text-primary">Notas</p>
 				{invoice.notes ? (
 					<p className="mt-2 whitespace-pre-line text-sm leading-6 text-secondary">
 						{invoice.notes}

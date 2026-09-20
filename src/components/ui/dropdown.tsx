@@ -13,7 +13,7 @@ export function DropdownMenuContent({
 		<DropdownPrimitive.Portal>
 			<DropdownPrimitive.Content
 				sideOffset={6}
-				className={`cf-animate-pop z-[var(--z-overlay)] min-w-48 rounded-lg border border-line-strong bg-glass p-1.5 shadow-pop ${className}`}
+				className={`cf-animate-pop z-[var(--z-overlay)] min-w-48 rounded-lg border border-line-strong bg-surface-raised p-1.5 shadow-pop ${className}`}
 				{...props}
 			/>
 		</DropdownPrimitive.Portal>
@@ -26,7 +26,7 @@ export function DropdownMenuItem({
 }: React.ComponentProps<typeof DropdownPrimitive.Item>) {
 	return (
 		<DropdownPrimitive.Item
-			className={`flex cursor-default items-center gap-2 rounded-md px-2.5 py-2 text-sm text-primary outline-none data-[highlighted]:bg-accent-soft data-[highlighted]:text-accent-strong ${className}`}
+			className={`flex cursor-default items-center gap-2 rounded-md px-2.5 py-2 text-sm text-primary outline-none data-[highlighted]:bg-surface-hover ${className}`}
 			{...props}
 		/>
 	);

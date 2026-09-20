@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
+	DialogBody,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
@@ -289,8 +290,8 @@ export function TeamSection({
 						Solo el propietario o un administrador gestionan los miembros.
 					</p>
 				</div>
-				<ul className="rounded-lg border border-line bg-surface-raised px-4 py-1">
-					{members.map((member) => (
+				<ul className="border-y border-line px-1 py-1">
+					{members.length === 0 ? <li className="px-3 py-4 text-sm text-secondary">Invita a otras personas para colaborar contigo en este espacio de trabajo.</li> : members.map((member) => (
 						<MemberLine
 							key={member.userId}
 							member={member}
@@ -330,8 +331,8 @@ export function TeamSection({
 			) : null}
 
 			{/* Miembros */}
-			<ul className="rounded-t-lg border border-line bg-surface-raised px-4 py-1">
-				{members.map((member) => (
+			<ul className="border-y border-line px-1 py-1">
+				{members.length === 0 ? <li className="px-3 py-4 text-sm text-secondary">Invita a otras personas para colaborar contigo en este espacio de trabajo.</li> : members.map((member) => (
 					<MemberLine
 						key={member.userId}
 						member={member}
@@ -349,10 +350,10 @@ export function TeamSection({
 			{/* Invitaciones pendientes */}
 			{invitations.length > 0 ? (
 				<div className="mt-5">
-					<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+					<p className="text-xs font-medium text-secondary">
 						Invitaciones pendientes
 					</p>
-					<ul className="mt-2 rounded-b-lg border border-t-0 border-line bg-surface-raised">
+					<ul className="mt-2 border-y border-line">
 						{invitations.map((invite) => (
 							<li
 								key={`${invite.id}-${invite.email}`}
@@ -412,7 +413,7 @@ export function TeamSection({
 								<code className="break-all text-xs text-secondary">{createdLink}</code>
 							</div>
 							<p className="text-xs leading-5 text-tertiary">
-								Mecanismo temporal de desarrollo: comparte el enlace con la persona invitada. No se volverá a mostrar.
+								Comparte este enlace con la persona invitada. Solo funciona una vez y expira en 7 días.
 							</p>
 							<DialogFooter>
 								<Button
@@ -446,12 +447,8 @@ export function TeamSection({
 									<b className="font-medium text-primary">{viewerRole === "owner" ? "administrador o miembro" : "miembro"}</b>.
 								</DialogDescription>
 							</DialogHeader>
-							<form
-								id="invite-form"
-								onSubmit={handleSubmit(onInvite)}
-								className="space-y-4"
-								noValidate
-							>
+							<DialogBody>
+							<form id="invite-form" onSubmit={handleSubmit(onInvite)} className="space-y-5" noValidate>
 								<Field
 									id="invite-email"
 									label="Email"
@@ -486,6 +483,7 @@ export function TeamSection({
 									) : null}
 								</div>
 							</form>
+							</DialogBody>
 							<DialogFooter>
 								<Button
 									type="button"

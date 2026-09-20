@@ -15,10 +15,11 @@ describe("appearance", () => {
 	});
 });
 
-describe("accent themes", () => {
-	it("contiene las siete paletas requeridas sin ids duplicados", () => {
+describe("monochrome theme", () => {
+	it("expone una única paleta sin ids duplicados", () => {
 		expect(THEMES.map((theme) => theme.id)).toEqual(THEME_IDS);
-		expect(new Set(THEMES.map((theme) => theme.id)).size).toBe(7);
+		expect(THEMES).toHaveLength(1);
+		expect(new Set(THEMES.map((theme) => theme.id)).size).toBe(1);
 	});
 
 	it("cada preview tiene superficie, acento, glow y texto", () => {
@@ -31,8 +32,8 @@ describe("accent themes", () => {
 	});
 
 	it("valida ids externos sin aceptar valores arbitrarios", () => {
-		expect(isThemeId("midnight")).toBe(true);
-		expect(isThemeId("forest")).toBe(true);
+		expect(isThemeId("mono")).toBe(true);
+		expect(isThemeId("midnight")).toBe(false);
 		expect(isThemeId("neon-pink")).toBe(false);
 		expect(isThemeId(null)).toBe(false);
 	});

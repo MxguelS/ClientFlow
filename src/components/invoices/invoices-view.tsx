@@ -61,11 +61,9 @@ export function InvoicesView({
 	const hasInvoices = invoices.length > 0;
 
 	return (
-		<div>
-			<div className="flex items-center justify-between gap-4">
-				<h1 className="text-2xl font-semibold tracking-[-0.03em] text-primary">
-					Facturas
-				</h1>
+		<div className="cf-page-enter">
+			<div className="flex items-center justify-between gap-4 border-b border-line pb-5">
+				<h1 className="text-2xl font-semibold tracking-[-0.03em] text-primary">Facturas <span className="ml-2 text-sm font-normal tracking-normal text-secondary">{invoices.length}</span></h1>
 				{clients.length > 0 ? (
 					<Button type="button" onClick={() => setCreateOpen(true)}>
 						<Plus aria-hidden="true" className="size-4" />
@@ -75,7 +73,7 @@ export function InvoicesView({
 			</div>
 
 			{!hasInvoices && clients.length === 0 ? (
-				<div className="mt-6 border-y border-line py-14 text-center">
+				<div className="mt-6 border-y border-line py-10 text-center">
 					<p className="text-sm font-medium text-primary">
 						Primero necesitas un cliente.
 					</p>
@@ -90,7 +88,7 @@ export function InvoicesView({
 					</Link>
 				</div>
 			) : !hasInvoices ? (
-				<div className="mt-6 border-y border-line py-14 text-center">
+				<div className="mt-6 border-y border-line py-10 text-center">
 					<p className="text-sm font-medium text-primary">
 						Todavía no hay facturas.
 					</p>
@@ -154,7 +152,7 @@ export function InvoicesView({
 						</div>
 					) : (
 						<div className="mt-4 border-y border-line">
-							<div className="hidden grid-cols-[minmax(0,1.2fr)_minmax(0,1.5fr)_120px_100px_120px] gap-4 border-b border-line px-3 py-2.5 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary md:grid">
+							<div className="hidden grid-cols-[minmax(0,1.2fr)_minmax(0,1.5fr)_120px_100px_120px] gap-4 border-b border-line px-3 py-2.5 text-xs font-medium text-secondary md:grid">
 								<span>Número</span>
 								<span>Cliente</span>
 								<span>Estado</span>

@@ -41,9 +41,9 @@ function StatBlock({
 	href?: string;
 }) {
 	const inner = (
-		<div className="py-4">
-			<p className="font-mono text-[10px] uppercase tracking-[0.16em] text-tertiary">{label}</p>
-			<p className="mt-2 text-lg font-semibold tabular-nums tracking-[-0.01em] text-primary">{value}</p>
+		<div className="py-5">
+			<p className="text-xs font-medium text-secondary">{label}</p>
+			<p className="mt-3 text-3xl font-semibold tabular-nums tracking-[-0.04em] text-primary">{value}</p>
 		</div>
 	);
 
@@ -83,7 +83,7 @@ function SectionHeader({
 			</div>
 			<Link
 				href={viewAllHref ?? ""}
-				className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.14em] text-secondary transition-colors hover:text-primary"
+				className="inline-flex items-center gap-1 text-xs text-secondary transition-colors hover:text-primary"
 			>
 				{viewAllLabel}
 				<ArrowRight aria-hidden="true" className="size-3" />
@@ -280,7 +280,7 @@ export default async function DashboardPage() {
 			{/* HEADER */}
 			<header className="flex items-end justify-between gap-4 border-b border-line pb-5">
 				<div className="min-w-0">
-					<p className="font-mono text-[10px] uppercase tracking-[0.18em] text-tertiary">
+					<p className="text-sm text-secondary">
 						{dateLabel} · Hoy
 					</p>
 					<h1 className="mt-2 truncate text-2xl font-semibold tracking-[-0.03em] text-primary sm:text-3xl">
@@ -291,7 +291,7 @@ export default async function DashboardPage() {
 							membership?.workspaceName
 						}
 					</h1>
-					<p className="mt-1 truncate font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+					<p className="mt-1 truncate text-xs text-tertiary">
 						{membership?.workspaceName}
 					</p>
 				</div>
@@ -324,14 +324,14 @@ export default async function DashboardPage() {
 			</section>
 
 			{/* REQUIERE ATENCIÓN */}
-			<section aria-label="Requiere atención" className="border-b border-line">
+			<section aria-label="Requiere atención" className="cf-page-enter border-b border-line py-2">
 				<div className="flex items-center justify-between py-3">
 					<div className="flex items-center gap-2.5">
 						<CalendarClock aria-hidden="true" className="size-4 text-accent" />
 						<h2 className="text-sm font-semibold text-primary">Requiere atención</h2>
 					</div>
 					{attentionItems.length > 0 ? (
-						<span className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+						<span className="text-xs text-secondary">
 							{attentionItems.length} {attentionItems.length === 1 ? "pendiente" : "pendientes"}
 						</span>
 					) : null}
@@ -349,6 +349,7 @@ export default async function DashboardPage() {
 				)}
 			</section>
 
+			<div className="cf-stagger grid gap-x-10 lg:grid-cols-2">
 			{/* PROYECTOS RECIENTES */}
 			<section aria-label="Proyectos recientes" className="border-b border-line">
 				<SectionHeader title="Proyectos" viewAllHref="/projects" viewAllLabel="Ver todos" count={projects?.length || 0} />
@@ -369,7 +370,7 @@ export default async function DashboardPage() {
 									<span className="min-w-0">
 										<span className="block truncate text-sm font-medium text-primary">{project.name}</span>
 										<span className="block truncate text-xs text-tertiary">
-											{clientName || "—"}
+											{clientName || "Sin cliente"}
 											{project.budget !== null ? ` · ${budgetFormatter.format(project.budget)}` : ""}
 											{project.due_date ? ` · vence ${formatDateOnly(project.due_date)}` : ""}
 										</span>
@@ -413,7 +414,7 @@ export default async function DashboardPage() {
 						<Receipt aria-hidden="true" className="size-4 text-accent" />
 						<h2 className="text-sm font-semibold text-primary">Facturación</h2>
 					</div>
-					<Link href="/invoices" className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.14em] text-secondary transition-colors hover:text-primary">
+						<Link href="/invoices" className="inline-flex items-center gap-1 text-xs text-secondary transition-colors hover:text-primary">
 						Ver todas
 						<ArrowRight aria-hidden="true" className="size-3" />
 					</Link>
@@ -450,6 +451,7 @@ export default async function DashboardPage() {
 					</ul>
 				)}
 			</section>
+			</div>
 		</div>
 	);
 }

@@ -34,7 +34,7 @@ export default async function DeliverablesPage() {
 			status: deliverable.status,
 			dueDate: deliverable.due_date,
 			projectName: project?.name ?? "",
-			clientName: client?.name ?? "",
+			clientName: client?.name ?? "Sin cliente",
 		};
 	});
 

@@ -54,14 +54,10 @@ export function AppShell({
 		<TooltipProvider>
 			<div className={`relative z-[var(--z-window)] flex h-dvh w-full items-center justify-center transition-[padding] duration-200 ease-flow ${maximized ? "p-0" : "p-0 sm:p-1"}`}>
 				<div className={`relative isolate flex h-full w-full flex-col overflow-hidden border border-line-strong bg-surface shadow-window transition-[border-radius] duration-200 ease-flow ${maximized ? "rounded-none" : "rounded-none sm:rounded-lg"}`}>
-					<div aria-hidden="true" className="cf-ambient-glow">
-						<div className="cf-ambient-glow-a" />
-						<div className="cf-ambient-glow-b" />
-					</div>
 					<Topbar workspaceName={workspace.name} maximized={maximized} onToggleSidebar={toggleSidebar} onToggleMaximized={() => setMaximized((value) => !value)} onOpenPalette={() => setPaletteOpen(true)} onOpenMobileNav={() => setMobileNavOpen(true)} />
 					<div className="flex min-h-0 flex-1">
 						<div className="hidden md:flex"><Sidebar workspaceName={workspace.name} user={user} collapsed={sidebarCollapsed} onToggle={toggleSidebar} /></div>
-						<main className="min-w-0 flex-1 overflow-y-auto bg-background/65">{children}</main>
+						<main className="min-w-0 flex-1 overflow-y-auto bg-background">{children}</main>
 					</div>
 				</div>
 			</div>

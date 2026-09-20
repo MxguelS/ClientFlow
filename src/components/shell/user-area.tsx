@@ -29,7 +29,7 @@ export function UserArea({ name, email }: { name: string; email: string }) {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="start" side="top" className="mb-1">
 				<DropdownMenuItem onSelect={() => router.push("/settings")}><SlidersHorizontal aria-hidden="true" className="size-4" />Ajustes</DropdownMenuItem>
-				<DropdownMenuItem onSelect={() => router.push("/dashboard")}><UserRound aria-hidden="true" className="size-4" />Ver perfil</DropdownMenuItem>
+				<DropdownMenuItem onSelect={() => router.push("/settings")}><UserRound aria-hidden="true" className="size-4" />Ver perfil</DropdownMenuItem>
 				<DropdownMenuSeparator className="my-1 h-px bg-line" />
 				<DropdownMenuItem onSelect={logout} className="text-danger data-[highlighted]:text-danger"><LogOut aria-hidden="true" className="size-4" />Cerrar sesión</DropdownMenuItem>
 			</DropdownMenuContent>

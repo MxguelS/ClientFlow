@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import {
 	loginSchema,
 	onboardingSchema,
+	passwordRecoveryRequestSchema,
+	passwordResetSchema,
 	registerSchema,
 } from "@/lib/validation";
 
@@ -68,6 +70,22 @@ describe("loginSchema", () => {
 		expect(
 			loginSchema.safeParse({ email: "a@b.com", password: "" }).success,
 		).toBe(false);
+	});
+});
+
+describe("passwordResetSchema", () => {
+	it("acepta contraseñas válidas y coincidentes", () => {
+		expect(passwordResetSchema.safeParse({ password: "secreto123", confirmPassword: "secreto123" }).success).toBe(true);
+	});
+
+	it("rechaza contraseñas diferentes o demasiado cortas", () => {
+		expect(passwordResetSchema.safeParse({ password: "secreto123", confirmPassword: "diferente" }).success).toBe(false);
+		expect(passwordResetSchema.safeParse({ password: "corta12", confirmPassword: "corta12" }).success).toBe(false);
+	});
+
+	it("valida el email usado para solicitar recuperación", () => {
+		expect(passwordRecoveryRequestSchema.safeParse({ email: "a@b.com" }).success).toBe(true);
+		expect(passwordRecoveryRequestSchema.safeParse({ email: "no-email" }).success).toBe(false);
 	});
 });
 

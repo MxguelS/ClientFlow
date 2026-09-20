@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -156,19 +156,19 @@ export function RegisterForm() {
 			<button
 				type="submit"
 				disabled={isSubmitting}
-				className={buttonPrimaryClasses}
+				className={`${buttonPrimaryClasses} group w-full justify-between px-4 active:scale-[0.995]`}
 			>
 				{isSubmitting ? (
 					<Loader2 aria-hidden className="size-4 animate-spin" />
 				) : null}
-				Crear cuenta
+				<span>Crear cuenta</span><ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
 			</button>
 
-			<p className="text-center text-sm text-neutral-500">
+			<p className="text-center text-sm text-secondary">
 				¿Ya tienes cuenta?{" "}
 				<a
 					href="/login"
-					className="font-medium text-neutral-900 underline underline-offset-4 hover:text-neutral-600"
+					className="font-medium text-primary underline decoration-line underline-offset-4 transition-colors hover:text-white focus-visible:text-white focus-visible:ring-2 focus-visible:ring-primary/60"
 				>
 					Inicia sesión
 				</a>

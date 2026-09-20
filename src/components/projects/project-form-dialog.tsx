@@ -50,7 +50,7 @@ export function ProjectFormDialog({
 	project?: {
 		id: string;
 		name: string;
-		clientId: string;
+		clientId: string | null;
 		description: string | null;
 		status: string;
 		budget: number | null;
@@ -72,7 +72,7 @@ export function ProjectFormDialog({
 		defaultValues: project
 			? {
 					name: project.name,
-					clientId: project.clientId,
+					clientId: project.clientId ?? "",
 					description: project.description ?? "",
 					status: (project.status as ProjectFormInput["status"]) ?? "planning",
 					budget: project.budget ?? "",
@@ -97,7 +97,7 @@ export function ProjectFormDialog({
 				project
 					? {
 							name: project.name,
-							clientId: project.clientId,
+							clientId: project.clientId ?? "",
 							description: project.description ?? "",
 							status: (project.status as ProjectFormInput["status"]) ?? "planning",
 							budget: project.budget ?? "",
@@ -166,7 +166,7 @@ export function ProjectFormDialog({
 					<DialogDescription className={dialogDescriptionClasses}>
 						{project
 							? "Actualiza la información del proyecto."
-							: "Crea un proyecto asociado a uno de tus clientes."}
+							: "Crea un proyecto con o sin cliente."}
 					</DialogDescription>
 				</DialogHeader>
 
@@ -200,6 +200,7 @@ export function ProjectFormDialog({
 									aria-invalid={errors.clientId ? true : undefined}
 									{...register("clientId")}
 								>
+									<option value="">Sin cliente</option>
 									{clients.map((client) => (
 										<option key={client.id} value={client.id}>
 											{client.name}

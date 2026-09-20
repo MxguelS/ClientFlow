@@ -189,10 +189,8 @@ export function ProjectFilesSection({
 
 	return (
 		<section className="border-t border-line py-4" aria-label="Archivos del proyecto">
-			<div className="flex items-center justify-between gap-3">
-				<p className="font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
-					Archivos
-				</p>
+			<div className="flex items-end justify-between gap-3">
+				<div><p className="text-sm font-semibold text-primary">Archivos</p><p className="mt-1 text-xs text-secondary">Guarda documentos y recursos relacionados con este proyecto.</p></div>
 				<label className="cursor-pointer">
 					<span className="sr-only">Subir archivo</span>
 					<Button
@@ -227,8 +225,8 @@ export function ProjectFilesSection({
 			) : null}
 
 			{files.length === 0 ? (
-				<p className="mt-2 text-sm text-tertiary">
-					Este proyecto todavía no tiene archivos.
+				<p className="mt-2 max-w-lg text-sm leading-6 text-tertiary">
+					Sube documentos, diseños, imágenes, PDFs y otros recursos para mantenerlos junto al proyecto.
 				</p>
 			) : (
 				<ul className="mt-2 border-y border-line">
@@ -250,7 +248,7 @@ export function ProjectFilesSection({
 											? "Generando enlace..."
 											: file.fileName}
 									</button>
-									<span className="mt-0.5 block text-[10px] font-mono text-tertiary">
+									<span className="mt-0.5 block text-xs text-secondary">
 										{file.mimeType ?? "desconocido"}
 										{file.sizeBytes !== null ? ` · ${formatFileSize(file.sizeBytes)}` : ""}
 										{" · "}

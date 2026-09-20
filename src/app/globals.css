@@ -3,12 +3,12 @@
 /*
  * ============================================================
  * ClientFlow Design System
- * Desktop application feel — Linear clarity + macOS surfaces
+ * Focused workspace — editorial contrast + operational clarity
  * ============================================================
  *
  * Arquitectura:
  *   1. Tokens neutros (light/dark)  -> superficies, texto, bordes
- *   2. Tokens de acento por theme   -> 7 paletas diseñadas a mano
+ *   2. Acento monocromo               -> contraste, no decoración
  *   3. Selección appearance         -> mapea acentos claros/oscuros
  *   4. Semánticos                   -> significado constante, no cambian con theme
  *   5. @theme inline                -> expone tokens como utilidades Tailwind
@@ -24,12 +24,10 @@
 [data-appearance="light"] {
 	color-scheme: light;
 
-	/* Fondo "escritorio" tras la ventana */
-	--wallpaper-from: #eceef2;
-	--wallpaper-to: #e2e5eb;
+	--wallpaper: #f5f5f5;
 
 	/* Superficies */
-	--background: #f2f3f6;
+	--background: #f5f5f5;
 	--surface: #ffffff;
 	--surface-raised: #ffffff;
 	--surface-sunken: #f6f6f8;
@@ -64,21 +62,19 @@
 	--overlay: rgb(15 15 20 / 32%);
 
 	/* Glow ambiental */
-	--glow-opacity: 0.16;
 }
 
 [data-appearance="dark"] {
 	color-scheme: dark;
 
-	--wallpaper-from: #0a0a0d;
-	--wallpaper-to: #121217;
+	--wallpaper: #000000;
 
-	--background: #0c0c0f;
-	--surface: #151518;
-	--surface-raised: #1b1b1f;
-	--surface-sunken: #101013;
-	--surface-hover: #202024;
-	--glass: rgb(24 24 29 / 78%);
+	--background: #000000;
+	--surface: #080808;
+	--surface-raised: #0d0d0d;
+	--surface-sunken: #0a0a0a;
+	--surface-hover: #171717;
+	--glass: #080808;
 
 	--text-primary: #f0f0f3;
 	--text-secondary: #a4a4af;
@@ -95,87 +91,18 @@
 	--danger: #f8717f;
 	--danger-soft: rgb(248 113 127 / 13%);
 
-	--shadow-window: 0 1px 2px rgb(0 0 0 / 40%), 0 24px 64px -12px rgb(0 0 0 / 55%), 0 48px 128px -24px rgb(0 0 0 / 45%);
+	--shadow-window: 0 1px 2px rgb(0 0 0 / 40%);
 	--shadow-pop: 0 4px 8px -2px rgb(0 0 0 / 40%), 0 16px 48px -8px rgb(0 0 0 / 60%);
 	--shadow-subtle: 0 1px 2px rgb(0 0 0 / 30%);
 	--shadow-inset-hairline: inset 0 1px 0 rgb(255 255 255 / 5%);
 
 	--overlay: rgb(0 0 0 / 55%);
 
-	--glow-opacity: 0.22;
 }
 
 /* ------------------------------------------------------------
- * 2. ACENTOS POR THEME (claro + oscuro por paleta)
- *    El theme controla acento/focus/selección/glow.
- *    NUNCA los semánticos.
+ * 2. ACENTO MONOCROMO
  * ------------------------------------------------------------ */
-
-[data-theme="midnight"] {
-	--accent-l: #4f5ae8;
-	--accent-l-hover: #434ce0;
-	--accent-l-strong: #3d47c9;
-	--accent-d: #7c86f7;
-	--accent-d-hover: #8e97f9;
-	--accent-d-strong: #9ba3fa;
-	--glow-a: #4c51d6;
-	--glow-b: #7a63e8;
-}
-
-[data-theme="crimson"] {
-	--accent-l: #d3313e;
-	--accent-l-hover: #c22531;
-	--accent-l-strong: #ab1c27;
-	--accent-d: #f0616b;
-	--accent-d-hover: #f4757e;
-	--accent-d-strong: #f88f97;
-	--glow-a: #b03a3e;
-	--glow-b: #d4526b;
-}
-
-[data-theme="ocean"] {
-	--accent-l: #0891b2;
-	--accent-l-hover: #0e7f9d;
-	--accent-l-strong: #0c6e89;
-	--accent-d: #38c0de;
-	--accent-d-hover: #55cbe5;
-	--accent-d-strong: #79d7ec;
-	--glow-a: #1d7f98;
-	--glow-b: #2b9db8;
-}
-
-[data-theme="aurora"] {
-	--accent-l: #8444d6;
-	--accent-l-hover: #7738c9;
-	--accent-l-strong: #652cb3;
-	--accent-d: #b083f2;
-	--accent-d-hover: #bd96f5;
-	--accent-d-strong: #cbaaf7;
-	--glow-a: #6d4bc7;
-	--glow-b: #9d55d9;
-}
-
-[data-theme="ember"] {
-	--accent-l: #d96c1e;
-	--accent-l-hover: #cc5f12;
-	--accent-l-strong: #b55210;
-	--accent-d: #f2954e;
-	--accent-d-hover: #f5a568;
-	--accent-d-strong: #f7b785;
-	--glow-a: #c05f1d;
-	--glow-b: #d97b2e;
-}
-
-[data-theme="forest"] {
-	--accent-l: #1f9257;
-	--accent-l-hover: #1b844e;
-	--accent-l-strong: #177243;
-	--accent-d: #4cc38a;
-	--accent-d-hover: #63cea0;
-	--accent-d-strong: #82d9b3;
-	--glow-a: #2c7a50;
-	--glow-b: #3f9968;
-}
 
 [data-theme="mono"] {
 	--accent-l: #3f3f46;
@@ -232,10 +159,12 @@
 	--radius-xl: 16px;
 	--radius-window: 18px;
 
-	--duration-fast: 150ms;
-	--duration-base: 200ms;
-	--duration-slow: 250ms;
-	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--motion-fast: 120ms;
+	--motion-normal: 200ms;
+	--motion-slow: 320ms;
+	--ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+	--ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+	--ease-exit: cubic-bezier(0.4, 0, 1, 1);
 
 	--z-glow: 0;
 	--z-window: 10;
@@ -251,12 +180,11 @@
  * ------------------------------------------------------------ */
 
 @theme inline {
-	--font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+	--font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif;
 	--font-mono: var(--font-geist-mono), ui-monospace, monospace;
-	--font-display: "DM Serif Display", Iowan Old Style, Palatino, serif;
+	--font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif;
 
-	--color-wallpaper-from: var(--wallpaper-from);
-	--color-wallpaper-to: var(--wallpaper-to);
+	--color-wallpaper: var(--wallpaper);
 	--color-background: var(--background);
 	--color-surface: var(--surface);
 	--color-surface-raised: var(--surface-raised);
@@ -297,7 +225,7 @@
 	--shadow-pop: var(--shadow-pop);
 	--shadow-subtle: var(--shadow-subtle);
 
-	--ease-flow: var(--ease-out);
+	--ease-flow: var(--ease-standard);
 }
 
 /* ------------------------------------------------------------
@@ -314,47 +242,13 @@ body {
 	font-weight: 400;
 }
 
-body {
-	background: linear-gradient(160deg, var(--wallpaper-from), var(--wallpaper-to));
+	body {
+	background: var(--wallpaper);
 	color: var(--text-primary);
 	font-family: var(--font-sans);
 	-webkit-font-smoothing: antialiased;
 	text-rendering: optimizeLegibility;
 	overflow: hidden;
-}
-
-.cf-ambient-glow {
-	position: absolute;
-	inset: 0;
-	overflow: hidden;
-	pointer-events: none;
-	z-index: var(--z-glow);
-}
-
-.cf-ambient-glow-a,
-.cf-ambient-glow-b {
-	position: absolute;
-	width: 45%;
-	height: 58%;
-	max-width: 640px;
-	max-height: 640px;
-	border-radius: 999px;
-	filter: blur(96px);
-	opacity: var(--glow-opacity);
-	animation: cf-glow-drift 60s ease-in-out infinite;
-}
-
-.cf-ambient-glow-a {
-	left: -10%;
-	top: -18%;
-	background: var(--glow-a);
-}
-
-.cf-ambient-glow-b {
-	right: -12%;
-	bottom: -22%;
-	background: var(--glow-b);
-	animation-delay: -30s;
 }
 
 *:focus-visible {
@@ -410,18 +304,6 @@ input[type="number"] {
  * 7. MOTION
  * ------------------------------------------------------------ */
 
-@keyframes cf-glow-drift {
-	0% {
-		transform: translate3d(-4%, -2%, 0) scale(1);
-	}
-	50% {
-		transform: translate3d(3%, 3%, 0) scale(1.06);
-	}
-	100% {
-		transform: translate3d(-4%, -2%, 0) scale(1);
-	}
-}
-
 @keyframes cf-overlay-in {
 	from {
 		opacity: 0;
@@ -452,16 +334,67 @@ input[type="number"] {
 	}
 }
 
+.cf-logo-mark {
+	position: relative;
+	overflow: hidden;
+}
+
+.cf-logo-mark::after {
+	content: "";
+	position: absolute;
+	top: -25%;
+	left: -10px;
+	width: 3px;
+	height: 150%;
+	background: var(--text-inverse);
+	box-shadow: 0 0 8px var(--text-inverse);
+	transform: rotate(24deg);
+	animation: cf-logo-sweep 760ms var(--ease-enter) both;
+}
+
+@keyframes cf-logo-sweep {
+	from { transform: translateX(-10px) rotate(24deg); opacity: 0; }
+	18% { opacity: 1; }
+	to { transform: translateX(42px) rotate(24deg); opacity: 0; }
+}
+
 .cf-animate-overlay {
-	animation: cf-overlay-in var(--duration-base) var(--ease-out);
+	animation: cf-overlay-in var(--motion-normal) var(--ease-enter);
 }
 
 .cf-animate-pop {
-	animation: cf-pop-in var(--duration-base) var(--ease-out);
+	animation: cf-pop-in var(--motion-normal) var(--ease-enter);
 }
 
 .cf-animate-skeleton {
 	animation: cf-pulse 1.6s ease-in-out infinite;
+}
+
+.cf-page-enter {
+	animation: cf-page-enter var(--motion-slow) var(--ease-enter) both;
+}
+
+.cf-word-in {
+	animation: cf-word-in var(--motion-normal) var(--ease-enter) both;
+}
+
+.cf-stagger > * {
+	animation: cf-page-enter var(--motion-slow) var(--ease-enter) both;
+}
+
+.cf-stagger > *:nth-child(1) { animation-delay: 80ms; }
+.cf-stagger > *:nth-child(2) { animation-delay: 140ms; }
+.cf-stagger > *:nth-child(3) { animation-delay: 200ms; }
+.cf-stagger > *:nth-child(4) { animation-delay: 260ms; }
+
+@keyframes cf-page-enter {
+	from { opacity: 0; transform: translateY(10px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cf-word-in {
+	from { opacity: 0; transform: translateY(0.35em); }
+	to { opacity: 1; transform: translateY(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -471,5 +404,15 @@ input[type="number"] {
 		animation-duration: 0.01ms !important;
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.01ms !important;
+	}
+
+	.cf-auth-activity > div > div {
+		opacity: 1 !important;
+		transform: none !important;
+	}
+
+	.cf-logo-mark::after {
+		animation: none;
+		display: none;
 	}
 }

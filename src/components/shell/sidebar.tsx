@@ -26,7 +26,7 @@ const modules = [
 function Brand({ collapsed }: { collapsed: boolean }) {
 	return (
 		<div className={`flex items-center gap-2.5 px-2 ${collapsed ? "justify-center" : ""}`}>
-			<div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-contrast shadow-subtle">
+			<div className="cf-logo-mark flex size-7 shrink-0 items-center justify-center rounded-lg bg-accent text-accent-contrast shadow-subtle">
 				<BriefcaseBusiness aria-hidden="true" className="size-3.5" strokeWidth={2.2} />
 			</div>
 			{collapsed ? null : <span className="text-sm font-semibold tracking-tight text-primary">ClientFlow</span>}

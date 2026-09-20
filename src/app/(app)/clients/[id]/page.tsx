@@ -60,7 +60,7 @@ export default async function ClientDetailPage({
 	}));
 
 	return (
-		<div className="mx-auto max-w-6xl px-5 py-6 sm:px-8 lg:px-10">
+		<div className="cf-page-enter mx-auto max-w-6xl px-5 py-6 sm:px-8 lg:px-10">
 			<Link
 				href="/clients"
 				className="inline-flex items-center gap-1.5 text-sm text-secondary transition-colors hover:text-primary"
@@ -72,7 +72,7 @@ export default async function ClientDetailPage({
 			<div className="mt-4 grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-10">
 				{/* Lista contextual: visible junto al panel en desktop. */}
 				<aside className="hidden lg:block" aria-label="Lista de clientes">
-					<p className="border-b border-line pb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+					<p className="border-b border-line pb-2 text-xs font-medium text-secondary">
 						Todos los clientes
 					</p>
 					<ul className="mt-1">

@@ -26,8 +26,8 @@ function isUuid(value: string): boolean {
 
 /**
  * Crea un proyecto en el workspace activo del usuario.
- * El client_id se valida leyendo el cliente bajo RLS: si el usuario no
- * puede verlo (workspace ajeno), la creación se rechaza en el servidor.
+ * Un client_id presente se valida bajo RLS; un valor nulo deja el proyecto
+ * sin cliente, pero siempre dentro del workspace activo.
  */
 export async function createProjectAction(
 	values: unknown,
@@ -42,18 +42,18 @@ export async function createProjectAction(
 
 	const supabase = await createClient();
 
-	const { data: client, error: clientError } = await supabase
-		.from("clients")
-		.select("id, workspace_id")
-		.eq("id", parsed.data.clientId)
-		.maybeSingle();
+	if (parsed.data.clientId) {
+		const { data: client, error: clientError } = await supabase
+			.from("clients")
+			.select("id, workspace_id")
+			.eq("id", parsed.data.clientId)
+			.maybeSingle();
 
-	if (clientError) {
-		console.error("project client lookup failed:", clientError.code, clientError.message);
-		return { status: "error", message: GENERIC_ERROR };
-	}
-	if (!client || client.workspace_id !== workspace.id) {
-		return { status: "client_not_found" };
+		if (clientError) {
+			console.error("project client lookup failed:", clientError.code, clientError.message);
+			return { status: "error", message: GENERIC_ERROR };
+		}
+		if (!client || client.workspace_id !== workspace.id) return { status: "client_not_found" };
 	}
 
 	const { data, error } = await supabase
@@ -105,23 +105,24 @@ export async function updateProjectAction(
 	}
 	if (!existing) return { status: "not_found" };
 
-	const { data: client, error: clientError } = await supabase
-		.from("clients")
-		.select("id, workspace_id")
-		.eq("id", parsed.data.clientId)
-		.maybeSingle();
+	if (parsed.data.clientId) {
+		const { data: client, error: clientError } = await supabase
+			.from("clients")
+			.select("id, workspace_id")
+			.eq("id", parsed.data.clientId)
+			.maybeSingle();
 
-	if (clientError) {
-		console.error("project client lookup failed:", clientError.code, clientError.message);
-		return { status: "error", message: GENERIC_ERROR };
-	}
-	if (!client || client.workspace_id !== existing.workspace_id) {
-		return { status: "client_not_found" };
+		if (clientError) {
+			console.error("project client lookup failed:", clientError.code, clientError.message);
+			return { status: "error", message: GENERIC_ERROR };
+		}
+		if (!client || client.workspace_id !== existing.workspace_id) return { status: "client_not_found" };
 	}
 
 	const { data: updated, error } = await supabase
 		.from("projects")
 		.update({
+			client_id: parsed.data.clientId,
 			name: parsed.data.name,
 			description: parsed.data.description,
 			status: parsed.data.status,

@@ -42,14 +42,14 @@ export default async function DeliverableDetailPage({
 		project && typeof project.client === "object" && project.client !== null
 			? project.client
 			: null;
-	if (!project || !client) notFound();
+	if (!project) notFound();
 
 	const dialogProjects: DeliverableDialogProject[] = (projects ?? []).map(
 		(projectOption) => ({ id: projectOption.id, name: projectOption.name }),
 	);
 
 	return (
-		<div className="mx-auto max-w-6xl px-5 py-6 sm:px-8 lg:px-10">
+		<div className="cf-page-enter mx-auto max-w-6xl px-5 py-6 sm:px-8 lg:px-10">
 			<Link href="/deliverables" className="inline-flex items-center gap-1.5 text-sm text-secondary transition-colors hover:text-primary">
 				<ArrowLeft aria-hidden="true" className="size-3.5" />
 				Entregables
@@ -57,7 +57,7 @@ export default async function DeliverableDetailPage({
 
 			<div className="mt-4 grid gap-8 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-10">
 				<aside className="hidden lg:block" aria-label="Lista de entregables">
-					<p className="border-b border-line pb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-tertiary">
+					<p className="border-b border-line pb-2 text-xs font-medium text-secondary">
 						Todos los entregables
 					</p>
 					<ul className="mt-1">
@@ -83,8 +83,8 @@ export default async function DeliverableDetailPage({
 							title: deliverable.title,
 							projectId: deliverable.project_id,
 							projectName: project.name,
-							clientId: client.id,
-							clientName: client.name,
+							clientId: client?.id ?? null,
+							clientName: client?.name ?? "Sin cliente",
 							description: deliverable.description,
 							status: deliverable.status,
 							dueDate: deliverable.due_date,

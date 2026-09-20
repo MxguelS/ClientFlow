@@ -9,7 +9,6 @@ import {
 	ListChecks,
 	LogOut,
 	Moon,
-	Palette,
 	Plus,
 	Receipt,
 	Search,
@@ -23,7 +22,6 @@ import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Kbd } from "@/components/ui/kbd";
 import { useTheme } from "@/components/theme/theme-provider";
-import { THEMES } from "@/lib/theme/config";
 import { filterCommands, type CommandItem } from "@/lib/command/filter";
 import { createClient } from "@/lib/supabase/client";
 
@@ -36,7 +34,7 @@ type Action = CommandItem & {
 
 export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
 	const router = useRouter();
-	const { setAppearance, setTheme } = useTheme();
+	const { setAppearance } = useTheme();
 	const [query, setQuery] = useState("");
 	const [activeIndex, setActiveIndex] = useState(0);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -60,9 +58,8 @@ export function CommandPalette({ open, onOpenChange }: { open: boolean; onOpenCh
 		{ id: "appearance-system", label: "Apariencia: System", keywords: ["tema automatico"], group: "Apariencia", icon: SunMoon, action: () => { setAppearance("system"); close(); } },
 		{ id: "appearance-light", label: "Apariencia: Light", keywords: ["tema claro"], group: "Apariencia", icon: Sun, action: () => { setAppearance("light"); close(); } },
 		{ id: "appearance-dark", label: "Apariencia: Dark", keywords: ["tema oscuro"], group: "Apariencia", icon: Moon, action: () => { setAppearance("dark"); close(); } },
-		...THEMES.map((theme) => ({ id: `theme-${theme.id}`, label: `Tema: ${theme.label}`, keywords: ["accent color color"], group: "Tema de acento", icon: Palette, action: () => { setTheme(theme.id); close(); }, accent: theme.preview.accent })),
 		{ id: "logout", label: "Cerrar sesión", keywords: ["salir logout"], group: "Cuenta", icon: LogOut, action: logout },
-	], [close, logout, navigate, setAppearance, setTheme]);
+	], [close, logout, navigate, setAppearance]);
 
 	const filtered = useMemo(() => filterCommands(actions, query), [actions, query]);
 

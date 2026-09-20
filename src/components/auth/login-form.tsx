@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -77,6 +77,10 @@ export function LoginForm() {
 				{...register("email")}
 			/>
 
+			<a href="/forgot-password" className="-mt-1 block text-sm text-secondary underline underline-offset-4 hover:text-primary">
+				¿Olvidaste tu contraseña?
+			</a>
+
 			<Field
 				id="password"
 				type="password"
@@ -89,19 +93,19 @@ export function LoginForm() {
 			<button
 				type="submit"
 				disabled={isSubmitting}
-				className={buttonPrimaryClasses}
+				className={`${buttonPrimaryClasses} group w-full justify-between px-4 active:scale-[0.995]`}
 			>
 				{isSubmitting ? (
 					<Loader2 aria-hidden className="size-4 animate-spin" />
 				) : null}
-				Iniciar sesión
+				<span>Iniciar sesión</span><ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
 			</button>
 
-			<p className="text-center text-sm text-neutral-500">
+			<p className="text-center text-sm text-secondary">
 				¿No tienes cuenta?{" "}
 				<a
 					href="/register"
-					className="font-medium text-neutral-900 underline underline-offset-4 hover:text-neutral-600"
+					className="font-medium text-primary underline decoration-line underline-offset-4 transition-colors hover:text-white focus-visible:text-white focus-visible:ring-2 focus-visible:ring-primary/60"
 				>
 					Regístrate
 				</a>
